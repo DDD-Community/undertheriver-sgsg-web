@@ -3,7 +3,6 @@
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Main } from './containers/index';
 import PrivateRoute from './pages/PrivateRoute';
