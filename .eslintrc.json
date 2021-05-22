@@ -48,6 +48,7 @@
     "@typescript-eslint/no-empty-function": ["off"], // use eslint no-empty-function rule
     "@typescript-eslint/no-use-before-define": ["off"], // use eslint no-use-before-define rule
     "@typescript-eslint/ban-ts-ignore": ["off"],
-    "@typescript-eslint/explicit-module-boundary-types": ["off"]
+    "@typescript-eslint/explicit-module-boundary-types": ["off"],
+    "@typescript-eslint/no-unused-vars": ["off"]
   }
 }

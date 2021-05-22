@@ -69,20 +69,3 @@ jobs:
       - name: code deploy
         run: aws deploy create-deployment --application-name undertheriver-sgsg --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name frontend --s3-location bucket=sgsg-deploy,bundleType=zip,key=frontend/build.zip
 
-  lint:
-    runs-on: ubuntu-18.04
-    name: ESLint
-    steps:
-      - name: 소스코드 체크아웃
-        uses: actions/checkout@v2
-
-      - name: ESLint 설치
-        run: npm i eslint
-
-      - name: Run ESLint
-        uses: stefanoeb/eslint-action@1.0.2
-        with:
-          files: src/
-
-      - name: 패키지 빌드
-        run: npm run build
