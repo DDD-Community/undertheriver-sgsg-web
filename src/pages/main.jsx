@@ -67,7 +67,7 @@ const cardListWrapper = css`
   }
 `;
 
-const Newtab = () => {
+const Main = () => {
   const [cards, setCards] = useState([
     { id: 1 },
     { id: 2 },
@@ -131,4 +131,4 @@ const Newtab = () => {
   );
 };
 
-export default Newtab;
+export default Main;

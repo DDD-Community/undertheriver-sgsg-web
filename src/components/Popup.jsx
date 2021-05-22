@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Textarea, Button } from '@chakra-ui/react';
 import TagInput from './TagInput';
-import Api, { checkFolder } from '../api/api';
+import Api, { checkFolder, createFolder } from '../api/api';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
@@ -140,7 +140,7 @@ const Popup = (props) => {
     try {
       let userId = '';
       setLoading(true);
-      Api.checkFolder(userId)
+      Api.checkFolder('MEMO')
         .then((response) => {
           setLoading(false);
           if (response.status === 200) {

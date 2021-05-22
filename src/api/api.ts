@@ -47,7 +47,7 @@ function moveLogin() {
 export function checkFolder(orderBy: string) {
   return new Promise((resolve, reject) => {
     return baseApi(apiPrefix)
-      .get('/folders' + '?' + orderBy, getAccessTokenHeader())
+      .get('/folders' + '?' + 'orderBy=' + orderBy, getAccessTokenHeader())
       .then((response: any) => {
         successStatusCheck(response, resolve);
       })
@@ -104,6 +104,19 @@ export function checkFolderColor() {
   return new Promise((resolve, reject) => {
     return baseApi(apiPrefix)
       .get('/folders', getAccessTokenHeader())
+      .then((response: any) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err: any) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
+export function listMemo() {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .get('/memos', getAccessTokenHeader())
       .then((response: any) => {
         successStatusCheck(response, resolve);
       })

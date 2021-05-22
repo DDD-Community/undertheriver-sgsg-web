@@ -4,7 +4,7 @@ import React from 'react';
 import { createMemoryHistory } from 'history';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import { Main } from './containers/index';
+import Main from './pages/main';
 import PrivateRoute from './pages/PrivateRoute';
 import Login from './pages/Login';
 import AfterLogin from './pages/AfterLogin';
