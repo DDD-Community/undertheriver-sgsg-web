@@ -1,0 +1,20 @@
+{
+  "name": "Create React App Sample",
+  "version": "0.0.1", "manifest_version": 2,
+  "description": "create-react-app for extensions",
+  "icons": [{
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  }],
+  "permissions": [],
+
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  },
+  "options_page": "index.html"
+}
