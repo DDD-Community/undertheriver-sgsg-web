@@ -73,7 +73,7 @@ const subTextWrapper = css`
 
 const Login = () => {
   const googleLogin = () => {
-    location.href = `http://api.sgsg.space/oauth2/authorization/google?redirect_uri=${process.env.REACT_APP_LOGIN_URL}`;
+    location.href = `https://api.sgsg.space/oauth2/authorization/google?redirect_uri=${process.env.REACT_APP_LOGIN_URL}`;
   };
 
   return (
