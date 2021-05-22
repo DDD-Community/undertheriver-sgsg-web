@@ -43,7 +43,7 @@ function moveLogin() {
   history.push('/login');
 }
 
-export function checkFolder(userId: string) {
+export function checkFolder(userId?: string) {
   return new Promise((resolve, reject) => {
     return baseApi(apiPrefix)
       .get('/folders' + '/' + userId, getAccessTokenHeader())
