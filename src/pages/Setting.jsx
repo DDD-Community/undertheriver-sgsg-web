@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import { Switch } from '@chakra-ui/react';
-import GNB from './components/GNB';
-import PasswordInput from './components/PasswordInput';
-import PasswordInputModal from './components/PasswordInputModal';
+import GNB from '../components/GNB';
+import PasswordInput from '../components/PasswordInput';
+import PasswordInputModal from '../components/PasswordInputModal';
 
 const pageWrapper = css`
   background: #f9f7f2;
