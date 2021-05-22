@@ -124,23 +124,16 @@ const Popup = (props: any) => {
     if (type === 'submit') {
       setSubmitFlag(true);
     }
-    // chrome-extension popup close
-    if ((props.extension && type === 'close') || (props.extension && submitFlag)) {
-      window.close();
-      return;
-    } else if (!props.extension) {
-      props.setWritePopup({
-        ...props.writePopup,
-        flag: false,
-      });
-    }
+    props.setWritePopup({
+      ...props.writePopup,
+      flag: false,
+    });
   };
 
   const writeMemoApi = () => {
     try {
-      const userId = '';
       setLoading(true);
-      Api.checkFolder(userId)
+      Api.checkFolder('CREATED_AT')
         .then((response: any) => {
           setLoading(false);
           if (response.status === 200) {

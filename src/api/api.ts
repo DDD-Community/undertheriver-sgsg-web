@@ -43,10 +43,67 @@ function moveLogin() {
   history.push('/login');
 }
 
-export function checkFolder(userId?: string) {
+//## 폴더 조회
+export function checkFolder(orderBy: string) {
   return new Promise((resolve, reject) => {
     return baseApi(apiPrefix)
-      .get('/folders' + '/' + userId, getAccessTokenHeader())
+      .get('/folders' + '?' + orderBy, getAccessTokenHeader())
+      .then((response: any) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err: any) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
+//## 폴더 생성
+export function createFolder(data: any) {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .post('/folders', data, getAccessTokenHeader())
+      .then((response: any) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err: any) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
+//## 폴더 삭제
+export function deleteFolder(folderId: number) {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .delete('/folders' + `/${folderId}`, getAccessTokenHeader())
+      .then((response) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
+//## 폴더 이름 수정
+export function updateFolder(folderId: number, title: string) {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .put('/folders' + `/${folderId}` + `/${title}`, getAccessTokenHeader())
+      .then((response) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
+//## 다음 폴더 색상 조회
+export function checkFolderColor() {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .get('/folders', getAccessTokenHeader())
       .then((response: any) => {
         successStatusCheck(response, resolve);
       })
@@ -58,4 +115,8 @@ export function checkFolder(userId?: string) {
 
 export default {
   checkFolder,
+  createFolder,
+  deleteFolder,
+  updateFolder,
+  checkFolderColor,
 };
