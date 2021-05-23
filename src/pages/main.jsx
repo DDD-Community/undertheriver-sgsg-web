@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -7,6 +7,8 @@ import Card from '../components/Card';
 import Popup from '../components/Popup';
 import NewMemoBtn from '../assets/img/newMemo.svg';
 import FolderList from '../components/FolderList';
+import Api, { userInfo } from '../api/api';
+import ErrorPopup from '../components/ErrorPopup';
 
 const pageWrapper = css`
   background: #f9f7f2;
@@ -83,12 +85,28 @@ const Main = () => {
       <Card />
     </li>
   ));
+
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({
+    email: '',
+    hasFolderPassword: false,
+    name: '',
+    profileImageUrl: '',
+  });
   const [writePopup, setWritePopup] = useState({
     flag: false,
     left: 0,
     top: 0,
   });
+  const [errorPopup, setErrorPopup] = useState({
+    active: '',
+    content: '',
+  });
   const buttonRef = useRef();
+
+  useEffect(() => {
+    userInfoApi();
+  }, []);
 
   const memoWrite = () => {
     if (buttonRef.current !== null) {
@@ -97,6 +115,41 @@ const Main = () => {
         left: buttonRef.current.offsetLeft - 344,
         top: buttonRef.current.offsetTop + 72,
       });
+    }
+  };
+
+  const userInfoApi = () => {
+    try {
+      setLoading(true);
+      Api.userInfo()
+        .then((response) => {
+          setLoading(false);
+          if (response.status === 200) {
+            const data = response.data;
+            if (data.success) {
+              setUser({
+                ...user,
+                email: data.response.email,
+                hasFolderPassword: data.response.hasFolderPassword,
+                name: data.response.name,
+                profileImageUrl: data.response.profileImageUrl,
+              });
+              localStorage.setItem('user', JSON.stringify(data.response));
+            } else {
+              setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+            }
+          } else {
+            setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+        });
+    } catch (e) {
+      setLoading(false);
+      setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
     }
   };
 
@@ -127,6 +180,11 @@ const Main = () => {
         </section>
       </main>
       {writePopup.flag && <Popup writePopup={writePopup} setWritePopup={setWritePopup} />}
+      <ErrorPopup
+        active={errorPopup.active}
+        content={errorPopup.content}
+        setErrorPopup={setErrorPopup}
+      />
     </>
   );
 };

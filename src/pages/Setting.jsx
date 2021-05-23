@@ -51,9 +51,16 @@ const pageWrapper = css`
 `;
 const Setting = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+
   function onOpenModal() {
     setIsModalVisible(true);
   }
+
+  const userLogout = () => {
+    localStorage.clear();
+    if (process.env.NODE_ENV === 'production') window.location.href = 'https://sgsg.space/login';
+    else window.location.href = 'http://localhost:3000/login';
+  };
   return (
     <>
       <GNB />
@@ -72,7 +79,9 @@ const Setting = () => {
             새 탭에서 시작
             <Switch size="lg" />
           </div>
-          <button className="logout-btn">로그아웃</button>
+          <button className="logout-btn" onClick={userLogout}>
+            로그아웃
+          </button>
         </div>
       </section>
     </>

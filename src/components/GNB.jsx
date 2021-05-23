@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
@@ -23,6 +23,11 @@ const gnbWrapper = css`
     display: flex;
     align-items: center;
   }
+
+  .profile-photo {
+    width: 2.5rem;
+    border-radius: 50%;
+  }
 `;
 
 const contentWrapper = css`
@@ -33,6 +38,18 @@ const contentWrapper = css`
 `;
 
 const GNB = () => {
+  const userData = localStorage.getItem('user');
+  const [user] = useState(
+    userData
+      ? JSON.parse(userData)
+      : {
+          email: '',
+          hasFolderPassword: false,
+          name: '',
+          profileImageUrl: ProfilePhoto,
+        },
+  );
+
   return (
     <nav css={gnbWrapper}>
       <div css={contentWrapper}>
@@ -47,7 +64,11 @@ const GNB = () => {
           <h2 className="account">
             <Link to="/setting">
               <figure>
-                <img src={ProfilePhoto} className="profile-photo" alt="A photo of main profile" />
+                <img
+                  src={user.profileImageUrl}
+                  className="profile-photo"
+                  alt="A photo of main profile"
+                />
               </figure>
             </Link>
           </h2>

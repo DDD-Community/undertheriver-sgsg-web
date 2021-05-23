@@ -23,6 +23,7 @@ const inputBox = css`
   }
 
   &.active {
+    caret-color: #f7f7f7;
     padding-left: 6.25rem;
   }
 `;
@@ -46,7 +47,27 @@ const keywordTag = css`
     display: block;
   }
 
-  &.red {
+  &.BLUE {
+    color: #2da5d7;
+    background-color: rgba(45, 165, 215, 0.2);
+  }
+
+  &.GREEN {
+    color: #00a09b;
+    background-color: rgba(0, 160, 155, 0.2);
+  }
+
+  &.ORANGE {
+    color: #f99a42;
+    background-color: rgba(249, 154, 66, 0.2);
+  }
+
+  &.PURPLE {
+    color: #9f69db;
+    background-color: rgba(159, 105, 219, 0.2);
+  }
+
+  &.RED {
     color: #e64632;
     background-color: rgba(230, 70, 50, 0.2);
   }
@@ -79,9 +100,8 @@ const closeTagBtn = css`
   padding-bottom: 0.188rem;
 `;
 
-function TagInput() {
+function TagInput(props: any) {
   const [keyword, setKeyword] = useState('');
-  const [selectKeyword, setSelectKeyword] = useState<any>([]);
   const [tempArr, setTempArr] = useState<any>([]);
   const [findFlag, setFindFlag] = useState(false);
   const [tagFlag, setTagFlag] = useState(false);
@@ -110,17 +130,17 @@ function TagInput() {
       }
       return item;
     });
-    setSelectKeyword(tempKey);
+    props.setSelectKeyword(tempKey);
   };
 
   // keyword input keypress event
   const handleKeyPress = (event: any) => {
     if (event.key === 'Enter' && keyword !== '') {
-      if (selectKeyword.length > 0) {
+      if (props.selectKeyword.length > 0) {
         setFindFlag(true);
         setKeyword('');
       } else {
-        setSelectKeyword([keyword]);
+        props.setSelectKeyword([keyword]);
         setFindFlag(true);
         setKeyword('');
       }
@@ -137,7 +157,7 @@ function TagInput() {
       }
     } else if (event.key === 'ArrowDown') {
       // down key press
-      if (selectKeyword.length > selectPosition + 1) {
+      if (props.selectKeyword.length > selectPosition + 1) {
         setSelectPosition(selectPosition + 1);
       }
     }
@@ -152,16 +172,16 @@ function TagInput() {
   // focus out keyword input
   const handleFocusOut = () => {
     if (keyword !== '' || keyword.length !== 0) {
-      setSelectKeyword([keyword]);
+      props.setSelectKeyword([keyword]);
       setFindFlag(true);
       setKeyword('');
     }
   };
 
   const deleteTag = () => {
-    if (selectKeyword.length > 0 && tagFlag) {
+    if (props.selectKeyword.length > 0 && tagFlag) {
       setFindFlag(false);
-      setSelectKeyword([]);
+      props.setSelectKeyword([]);
       setTagFlag(false);
     }
   };
@@ -169,7 +189,7 @@ function TagInput() {
   const renderSelectList = () => {
     const html: any[] = [];
 
-    selectKeyword.map((item: any, idx: number) => {
+    props.selectKeyword.map((item: any, idx: number) => {
       html.push(
         <li
           css={selectListItem}
@@ -181,7 +201,6 @@ function TagInput() {
         </li>,
       );
     });
-
     return html;
   };
 
@@ -198,11 +217,16 @@ function TagInput() {
         onKeyDown={(e) => handleKeyPress(e)}
         onChange={findFlag ? undefined : (e) => setKeyword(e.target.value)}
       />
-      <Badge css={keywordTag} className={findFlag ? 'active red' : ''} onClick={() => deleteTag()}>
-        {selectKeyword[selectPosition]}
+      <Badge
+        css={keywordTag}
+        id="keyword-tag"
+        className={(findFlag ? 'active ' : '') + props.color}
+        onClick={() => deleteTag()}
+      >
+        {props.selectKeyword[selectPosition]}
         {tagFlag && <img src={CloseTag} css={closeTagBtn} alt="Close Tag Button" />}
       </Badge>
-      {!findFlag && selectKeyword.length > 0 && (
+      {!findFlag && props.selectKeyword.length > 0 && (
         <div css={selectBox}>
           <ul>{renderSelectList()}</ul>
         </div>

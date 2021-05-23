@@ -43,6 +43,20 @@ function moveLogin() {
   history.push('/login');
 }
 
+//## 로그아웃
+export function authLogout() {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .delete('/auth/logout', getAccessTokenHeader())
+      .then((response) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
 //## 폴더 조회
 export function checkFolder(orderBy: string) {
   return new Promise((resolve, reject) => {
@@ -103,7 +117,7 @@ export function updateFolder(folderId: number, title: string) {
 export function checkFolderColor() {
   return new Promise((resolve, reject) => {
     return baseApi(apiPrefix)
-      .get('/folders', getAccessTokenHeader())
+      .get('/folders/color', getAccessTokenHeader())
       .then((response: any) => {
         successStatusCheck(response, resolve);
       })
@@ -126,10 +140,42 @@ export function listMemo() {
   });
 }
 
+//## 메모 생성
+export function createMemo(data: any) {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .post('/memos', data, getAccessTokenHeader())
+      .then((response: any) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err: any) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
+//## 회원 조회
+export function userInfo() {
+  return new Promise((resolve, reject) => {
+    return baseApi(apiPrefix)
+      .get('/users/me', getAccessTokenHeader())
+      .then((response: any) => {
+        successStatusCheck(response, resolve);
+      })
+      .catch((err: any) => {
+        failStatusCheck(err, reject);
+      });
+  });
+}
+
 export default {
+  authLogout,
   checkFolder,
   createFolder,
   deleteFolder,
   updateFolder,
   checkFolderColor,
+  listMemo,
+  createMemo,
+  userInfo,
 };
