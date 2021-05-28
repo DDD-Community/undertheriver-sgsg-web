@@ -70,22 +70,6 @@ const cardListWrapper = css`
 `;
 
 const Main = () => {
-  const [cards, setCards] = useState([
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-    { id: 7 },
-    { id: 8 },
-  ]);
-  const cardList = cards.map((card) => (
-    <li key={card.id}>
-      <Card />
-    </li>
-  ));
-
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
@@ -153,18 +137,89 @@ const Main = () => {
     }
   };
 
+  const [selectedFolder, setSelectedFolder] = useState('전체');
+  const [cards, setCards] = useState([
+    {
+      createdAt: '',
+      favorite: false,
+      folderColor: '',
+      folderId: 0,
+      folderTitle: '',
+      memoContent: '',
+      memoId: 0,
+      thumbnailUrl: '',
+    },
+  ]);
+  useEffect(() => {
+    console.log('test', selectedFolder);
+    listMemoApi(1);
+  }, [selectedFolder]);
+  const cardList = (
+    <div>
+      <li key={1}>
+        <Card />
+      </li>
+      <li key={2}>
+        <Card />
+      </li>
+      <li key={3}>
+        <Card />
+      </li>
+      <li key={4}>
+        <Card />
+      </li>
+    </div>
+  );
+  // const cardList = cards.map((card) => (
+  //   <li key={card.memoId}>
+  //     <Card />
+  //   </li>
+  // ));
+  const listMemoApi = (folderId) => {
+    try {
+      const obj = {
+        folderId: folderId,
+      };
+
+      setLoading(true);
+      Api.listMemo(obj)
+        .then((response: any) => {
+          setLoading(false);
+          if (response.status === 200) {
+            const data = response.data;
+            if (data.success) {
+              setCards(data);
+              console.log(cards);
+            } else {
+              setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+            }
+          } else {
+            setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+        });
+    } catch (e) {
+      setLoading(false);
+      setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+    }
+  };
+
   return (
     <>
       <GNB />
       <main css={pageWrapper}>
         <section className="content-wrapper">
           <aside className="aside-wrapper">
-            <FolderList />
+            <FolderList setSelectedFolder={setSelectedFolder} />
           </aside>
           <div className="right-section">
             <div className="header">
               <h2 className="folder-name">
-                전체
+                {selectedFolder}
                 <span className="folder-count">{cardList.length}</span>
               </h2>
               <button onClick={() => memoWrite()} ref={buttonRef}>
