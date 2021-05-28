@@ -7,7 +7,7 @@ import Card from '../components/Card';
 import Popup from '../components/Popup';
 import NewMemoBtn from '../assets/img/newMemo.svg';
 import FolderList from '../components/FolderList';
-import Api, { userInfo } from '../api/api';
+import Api, { checkFolder, userInfo } from '../api/api';
 import ErrorPopup from '../components/ErrorPopup';
 
 const pageWrapper = css`
@@ -69,6 +69,8 @@ const cardListWrapper = css`
   }
 `;
 
+const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주세요.';
+
 const Main = () => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
@@ -86,11 +88,31 @@ const Main = () => {
     active: '',
     content: '',
   });
+  const [folderList, setFolderList] = useState([]);
+  const [allMemoLength, setAllMemoLength] = useState(0);
+  const [selectedFolder, setSelectedFolder] = useState('전체');
+  const [cards, setCards] = useState([
+    {
+      createdAt: '',
+      favorite: false,
+      folderColor: '',
+      folderId: 0,
+      folderTitle: '',
+      memoContent: '',
+      memoId: 0,
+      thumbnailUrl: '',
+    },
+  ]);
   const buttonRef = useRef();
 
   useEffect(() => {
     userInfoApi();
+    checkFolderApi();
   }, []);
+
+  useEffect(() => {
+    listMemoApi(1);
+  }, [selectedFolder]);
 
   const memoWrite = () => {
     if (buttonRef.current !== null) {
@@ -99,6 +121,26 @@ const Main = () => {
         left: buttonRef.current.offsetLeft - 344,
         top: buttonRef.current.offsetTop + 72,
       });
+    }
+  };
+
+  const renderCardList = () => {
+    let html = [];
+
+    try {
+      if (cards.length === 0) {
+        return html;
+      }
+      cards.map((d, idx) => {
+        html.push(
+          <li key={idx}>
+            <Card memo={d} />
+          </li>,
+        );
+      });
+      return html;
+    } catch (e) {
+      return html;
     }
   };
 
@@ -120,61 +162,56 @@ const Main = () => {
               });
               localStorage.setItem('user', JSON.stringify(data.response));
             } else {
-              setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+              setErrorPopup({ active: 'active', content: defaultMsg });
             }
           } else {
-            setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+            setErrorPopup({ active: 'active', content: defaultMsg });
           }
         })
         .catch((err) => {
           console.log(err);
           setLoading(false);
-          setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+          setErrorPopup({ active: 'active', content: defaultMsg });
         });
     } catch (e) {
       setLoading(false);
-      setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+      setErrorPopup({ active: 'active', content: defaultMsg });
     }
   };
 
-  const [selectedFolder, setSelectedFolder] = useState('전체');
-  const [cards, setCards] = useState([
-    {
-      createdAt: '',
-      favorite: false,
-      folderColor: '',
-      folderId: 0,
-      folderTitle: '',
-      memoContent: '',
-      memoId: 0,
-      thumbnailUrl: '',
-    },
-  ]);
-  useEffect(() => {
-    console.log('test', selectedFolder);
-    listMemoApi(1);
-  }, [selectedFolder]);
-  const cardList = (
-    <div>
-      <li key={1}>
-        <Card />
-      </li>
-      <li key={2}>
-        <Card />
-      </li>
-      <li key={3}>
-        <Card />
-      </li>
-      <li key={4}>
-        <Card />
-      </li>
-    </div>
-  );
-  // const cardList = cards.map((card) => (
-  //   <li key={card.memoId}>
-  //     <Card />
-  //   </li>
-  // ));
+  const checkFolderApi = () => {
+    try {
+      setLoading(true);
+      Api.checkFolder('CREATED_AT')
+        .then((response) => {
+          setLoading(false);
+          if (response.status === 200) {
+            const data = response.data;
+            if (data.success) {
+              let memoLength = 0;
+              for (let i = 0; i < data.response.length; i++) {
+                memoLength += data.response[i].memoCount;
+              }
+              setAllMemoLength(memoLength);
+              setFolderList(data.response);
+            } else {
+              setErrorPopup({ active: 'active', content: defaultMsg });
+            }
+          } else {
+            setErrorPopup({ active: 'active', content: defaultMsg });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setErrorPopup({ active: 'active', content: defaultMsg });
+        });
+    } catch (e) {
+      setLoading(false);
+      setErrorPopup({ active: 'active', content: defaultMsg });
+    }
+  };
+
   const listMemoApi = (folderId) => {
     try {
       const obj = {
@@ -183,28 +220,27 @@ const Main = () => {
 
       setLoading(true);
       Api.listMemo(obj)
-        .then((response: any) => {
+        .then((response) => {
           setLoading(false);
           if (response.status === 200) {
             const data = response.data;
             if (data.success) {
-              setCards(data);
-              console.log(cards);
+              setCards(data.response);
             } else {
-              setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+              setErrorPopup({ active: 'active', content: defaultMsg });
             }
           } else {
-            setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+            setErrorPopup({ active: 'active', content: defaultMsg });
           }
         })
         .catch((err) => {
           console.log(err);
           setLoading(false);
-          setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+          setErrorPopup({ active: 'active', content: defaultMsg });
         });
     } catch (e) {
       setLoading(false);
-      setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+      setErrorPopup({ active: 'active', content: defaultMsg });
     }
   };
 
@@ -214,13 +250,18 @@ const Main = () => {
       <main css={pageWrapper}>
         <section className="content-wrapper">
           <aside className="aside-wrapper">
-            <FolderList setSelectedFolder={setSelectedFolder} />
+            <FolderList
+              folderList={folderList}
+              allMemoLength={allMemoLength}
+              setSelectedFolder={setSelectedFolder}
+            />
           </aside>
           <div className="right-section">
             <div className="header">
               <h2 className="folder-name">
                 {selectedFolder}
-                <span className="folder-count">{cardList.length}</span>
+                {/* Todo 폴더 메모 갯수 수정사항 */}
+                <span className="folder-count">{allMemoLength}</span>
               </h2>
               <button onClick={() => memoWrite()} ref={buttonRef}>
                 <figure>
@@ -229,7 +270,7 @@ const Main = () => {
               </button>
             </div>
             <article css={cardListWrapper}>
-              <ul className="card-list">{cardList}</ul>
+              <ul className="card-list">{renderCardList()}</ul>
             </article>
           </div>
         </section>
