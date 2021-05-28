@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import moment from 'moment';
 import { Box, useDisclosure } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
@@ -48,9 +49,11 @@ const headerSection = css`
     line-height: 17px;
     align-self: center;
   }
+
   .badge {
     align-self: center;
   }
+
   .menu-btn {
     align-self: center;
   }
@@ -73,15 +76,18 @@ const menu = [
   { label: '삭제하기' },
 ];
 
-function Card() {
+function Card(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   function onOpenModal() {
     setIsModalVisible(true);
   }
+
   function onOpenMenu() {
     setIsMenuOpen(true);
   }
+
   function onCloseMenu(ref) {
     useEffect(() => {
       function handleClickOutside(event) {
@@ -89,12 +95,14 @@ function Card() {
           setIsMenuOpen(false);
         }
       }
+
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }, [ref]);
   }
+
   const wrapperRef = useRef(null);
   onCloseMenu(wrapperRef);
   return (
@@ -103,8 +111,10 @@ function Card() {
         <div css={innerCardWrapper}>
           <div className="content">
             <div css={headerSection}>
-              <span className="date">03.02</span>
-              <Badge color={'#2DA5D7'} className="badge" />
+              <span className="date">{moment(props.memo.createdAt).format('MM.DD')}</span>
+              {/*{props.memo.favorite && */}
+              <Badge color={props.memo.folderColor} className="badge" />
+              {/*}*/}
               <span className="menu-btn" onClick={onOpenMenu}>
                 <img src={MoreBtn} />
               </span>
@@ -115,11 +125,11 @@ function Card() {
               </div>
             )}
             <div css={bodySection} onClick={onOpenModal}>
-              내용입니다!
+              {props.memo.memoContent}
               <Modal visible={isModalVisible} />
             </div>
             <div css={tagSection}>
-              <Tag tagColor={'rgba(45, 165, 215, 0.2)'} textColor={'#2DA5D7'} text={'test'} />
+              <Tag color={props.memo.folderColor} text={props.memo.folderTitle} />
             </div>
             <Modal />
           </div>

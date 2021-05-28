@@ -60,13 +60,16 @@ const folderListWrapper = css`
     font-weight: bold;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
+
     .folder-item {
       display: inherit;
       align-items: center;
+
       .label {
         margin-left: 0.75rem;
       }
     }
+
     &:hover {
       background: #ece9e3;
       border-radius: 4px;
@@ -75,19 +78,42 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
-  const [folders, setFolders] = useState([
-    { id: 1, label: '전체', color: 'gray', count: 11 },
-    { id: 2, label: 'DDD', color: 'blue', count: 5 },
-    { id: 3, label: '멍멍', color: 'coral', count: 6 },
-  ]);
-  const folderList = folders.map((d) => (
-    <li key={d.label} className="folder-list" onClick={() => props.setSelectedFolder(d.label)}>
-      <div className="folder-item">
-        <Folder color={d.color} /> <span className="label">{d.label}</span>
-      </div>
-      <div className="count">{d.count}</div>
-    </li>
-  ));
+  const renderFolderList = () => {
+    let html = [];
+
+    try {
+      if (props.folderList.length === 0) {
+        return html;
+      }
+      html.push(
+        <li
+          key={Math.random()}
+          className="folder-list"
+          onClick={() => props.setSelectedFolder('전체')}
+        >
+          <div className="folder-item">
+            <Folder color="black" /> <span className="label">전체</span>
+          </div>
+          <div className="count">{props.allMemoLength}</div>
+        </li>,
+      );
+
+      props.folderList.map((d) => {
+        html.push(
+          <li key={d.id} className="folder-list" onClick={() => props.setSelectedFolder(d.title)}>
+            <div className="folder-item">
+              <Folder color={d.color} /> <span className="label">{d.title}</span>
+            </div>
+            <div className="count">{d.memoCount}</div>
+          </li>,
+        );
+      });
+      return html;
+    } catch (e) {
+      return html;
+    }
+  };
+
   return (
     <section css={folderListWrapper}>
       <div className="menu-wrapper">
@@ -99,8 +125,9 @@ function FolderList(props) {
         </div>
         <p className="sortable-menu">이름순</p>
       </div>
-      <ul>{folderList}</ul>
+      <ul>{renderFolderList()}</ul>
     </section>
   );
 }
+
 export default FolderList;
