@@ -32,7 +32,7 @@ export default function ErrorPopup(props: any) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              에러
+              안내
             </AlertDialogHeader>
 
             <AlertDialogBody>{props.content}</AlertDialogBody>

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import React from 'react';
-import { createMemoryHistory } from 'history';
+import { createBrowserHistory } from 'history';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import Main from './pages/main';
@@ -11,7 +11,7 @@ import AfterLogin from './pages/AfterLogin';
 import Setting from './pages/Setting';
 import NotFound from './pages/NotFound';
 
-const history = createMemoryHistory();
+const history = createBrowserHistory();
 
 const Root: React.FC = () => (
   <ChakraProvider resetCSS>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Textarea, Button } from '@chakra-ui/react';
 import TagInput from './TagInput';
-import Api, { checkFolderColor } from '../api/api';
+import Api from '../api/api';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import CloseBtn from '../assets/img/closeBtn.svg';
+import penSound from '../assets/sounds/penSound.mp3';
 import ErrorPopup from './ErrorPopup';
+import * as Utils from '../lib/utils';
 
 const textareaWrapper = css`
   padding: 3rem 1rem 0 1rem;
@@ -61,6 +63,9 @@ const closeButton = css`
   background-repeat: no-repeat;
   cursor: pointer;
 `;
+
+const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주세요.';
+const es: any = Utils.effectSound(penSound, 1);
 
 const Popup = (props: any) => {
   const [loading, setLoading] = useState(false);
@@ -166,20 +171,20 @@ const Popup = (props: any) => {
               });
               localStorage.setItem('next_color', data.response.nextColor);
             } else {
-              setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+              setErrorPopup({ active: 'active', content: defaultMsg });
             }
           } else {
-            setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+            setErrorPopup({ active: 'active', content: defaultMsg });
           }
         })
         .catch((err) => {
           console.log(err);
           setLoading(false);
-          setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+          setErrorPopup({ active: 'active', content: defaultMsg });
         });
     } catch (e) {
       setLoading(false);
-      setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+      setErrorPopup({ active: 'active', content: defaultMsg });
     }
   };
 
@@ -198,22 +203,23 @@ const Popup = (props: any) => {
             const data = response.data;
             if (data.success) {
               checkfolderColor();
+              es.play();
               // todo redirect main
             } else {
-              setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+              setErrorPopup({ active: 'active', content: defaultMsg });
             }
           } else {
-            setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+            setErrorPopup({ active: 'active', content: defaultMsg });
           }
         })
         .catch((err) => {
           console.log(err);
           setLoading(false);
-          setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+          setErrorPopup({ active: 'active', content: defaultMsg });
         });
     } catch (e) {
       setLoading(false);
-      setErrorPopup({ active: 'active', content: '일시적인 오류입니다.' });
+      setErrorPopup({ active: 'active', content: defaultMsg });
     }
   };
 
