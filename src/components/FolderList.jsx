@@ -74,14 +74,14 @@ const folderListWrapper = css`
   }
 `;
 
-function FolderList() {
+function FolderList(props) {
   const [folders, setFolders] = useState([
     { id: 1, label: '전체', color: 'gray', count: 11 },
     { id: 2, label: 'DDD', color: 'blue', count: 5 },
     { id: 3, label: '멍멍', color: 'coral', count: 6 },
   ]);
   const folderList = folders.map((d) => (
-    <li key={d.label} className="folder-list">
+    <li key={d.label} className="folder-list" onClick={() => props.setSelectedFolder(d.label)}>
       <div className="folder-item">
         <Folder color={d.color} /> <span className="label">{d.label}</span>
       </div>
