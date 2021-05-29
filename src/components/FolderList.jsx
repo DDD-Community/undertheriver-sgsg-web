@@ -78,6 +78,9 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
+  const onClickFolder = (title, id = null) => {
+    props.setSelectedFolder({ title: title, id: id });
+  };
   const renderFolderList = () => {
     let html = [];
 
@@ -86,11 +89,7 @@ function FolderList(props) {
         return html;
       }
       html.push(
-        <li
-          key={Math.random()}
-          className="folder-list"
-          onClick={() => props.setSelectedFolder('전체')}
-        >
+        <li key={Math.random()} className="folder-list" onClick={() => onClickFolder('전체')}>
           <div className="folder-item">
             <Folder color="black" /> <span className="label">전체</span>
           </div>
@@ -100,7 +99,7 @@ function FolderList(props) {
 
       props.folderList.map((d) => {
         html.push(
-          <li key={d.id} className="folder-list" onClick={() => props.setSelectedFolder(d.title)}>
+          <li key={d.id} className="folder-list" onClick={() => onClickFolder(d.title, d.id)}>
             <div className="folder-item">
               <Folder color={d.color} /> <span className="label">{d.title}</span>
             </div>

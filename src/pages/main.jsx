@@ -90,7 +90,7 @@ const Main = () => {
   });
   const [folderList, setFolderList] = useState([]);
   const [allMemoLength, setAllMemoLength] = useState(0);
-  const [selectedFolder, setSelectedFolder] = useState('전체');
+  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null });
   const [cards, setCards] = useState([
     {
       createdAt: '',
@@ -108,10 +108,11 @@ const Main = () => {
   useEffect(() => {
     userInfoApi();
     checkFolderApi();
+    listMemoApi();
   }, []);
 
   useEffect(() => {
-    listMemoApi(1);
+    listMemoApi(selectedFolder.id);
   }, [selectedFolder]);
 
   const memoWrite = () => {
@@ -215,7 +216,7 @@ const Main = () => {
   const listMemoApi = (folderId) => {
     try {
       const obj = {
-        folderId: folderId,
+        folderId: folderId ? folderId : null,
       };
 
       setLoading(true);
@@ -259,7 +260,7 @@ const Main = () => {
           <div className="right-section">
             <div className="header">
               <h2 className="folder-name">
-                {selectedFolder}
+                {selectedFolder.title}
                 {/* Todo 폴더 메모 갯수 수정사항 */}
                 <span className="folder-count">{allMemoLength}</span>
               </h2>

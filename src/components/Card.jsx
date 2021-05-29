@@ -112,9 +112,7 @@ function Card(props) {
           <div className="content">
             <div css={headerSection}>
               <span className="date">{moment(props.memo.createdAt).format('MM.DD')}</span>
-              {/*{props.memo.favorite && */}
-              <Badge color={props.memo.folderColor} className="badge" />
-              {/*}*/}
+              {props.memo.favorite && <Badge color={props.memo.folderColor} className="badge" />}
               <span className="menu-btn" onClick={onOpenMenu}>
                 <img src={MoreBtn} />
               </span>

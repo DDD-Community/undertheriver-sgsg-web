@@ -127,17 +127,30 @@ export function checkFolderColor() {
   });
 }
 
-export function listMemo() {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .get('/memos', getAccessTokenHeader())
-      .then((response: any) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err: any) => {
-        failStatusCheck(err, reject);
-      });
-  });
+export function listMemo(data: any) {
+  if (data.folderId) {
+    return new Promise((resolve, reject) => {
+      return baseApi(apiPrefix)
+        .get('/memos' + '?' + 'folderId=' + data.folderId, getAccessTokenHeader())
+        .then((response: any) => {
+          successStatusCheck(response, resolve);
+        })
+        .catch((err: any) => {
+          failStatusCheck(err, reject);
+        });
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      return baseApi(apiPrefix)
+        .get('/memos', getAccessTokenHeader())
+        .then((response: any) => {
+          successStatusCheck(response, resolve);
+        })
+        .catch((err: any) => {
+          failStatusCheck(err, reject);
+        });
+    });
+  }
 }
 
 //## 메모 생성
