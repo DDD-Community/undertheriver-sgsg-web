@@ -3,7 +3,7 @@ import React from 'react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import GNB from '../components/GNB';
-import GoogleIcon from '../assets/img/icon-google.png';
+import GoogleIcon from '../assets/img/icon-google.svg';
 
 const pageWrapper = css`
   background: #f9f7f2;

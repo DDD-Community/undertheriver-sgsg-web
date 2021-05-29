@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import { Switch } from '@chakra-ui/react';
 import GNB from '../components/GNB';
+import GoogleIcon from '../assets/img/icon-google.svg';
 import PasswordInput from '../components/PasswordInput';
 import PasswordInputModal from '../components/PasswordInputModal';
 
@@ -23,12 +24,14 @@ const pageWrapper = css`
   }
 
   .page-title {
+    color: #3c3a37;
     font-weight: bold;
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
   }
 
   .list-wrapper {
+    color: #3c3a37;
     display: flex;
     justify-content: space-between;
     width: 50rem;
@@ -48,9 +51,22 @@ const pageWrapper = css`
     color: white;
     font-weight: bold;
   }
+
+  .email-account {
+    width: 31.25rem;
+    color: #5d6571;
+    padding: 1rem 1rem 1rem 4rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    background-image: url(${GoogleIcon});
+    background-repeat: no-repeat;
+    background-size: 2rem 2rem;
+    background-position: left 1.188rem top 0.75rem;
+  }
 `;
 const Setting = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [email] = useState(JSON.parse(localStorage.getItem('user')).email);
 
   function onOpenModal() {
     setIsModalVisible(true);
@@ -67,7 +83,10 @@ const Setting = () => {
       <section css={pageWrapper}>
         <div className="content-wrapper">
           <h3 className="page-title">설정</h3>
-          <div className="list-wrapper">연동 이메일</div>
+          <div className="list-wrapper">
+            연동 이메일
+            <div className="email-account">{email}</div>
+          </div>
           <div className="list-wrapper">
             메모 비밀번호 설정
             <button className="setting-btn" onClick={onOpenModal}>
