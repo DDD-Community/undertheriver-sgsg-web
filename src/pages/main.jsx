@@ -63,7 +63,7 @@ const pageWrapper = css`
 const cardListWrapper = css`
   .card-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(302px, auto));
+    grid-template-columns: repeat(auto-fit, minmax(302px, 302px));
     gap: 1.5rem;
     margin-top: 3rem;
   }

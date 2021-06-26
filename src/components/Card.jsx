@@ -124,7 +124,13 @@ function Card(props) {
             )}
             <div css={bodySection} onClick={onOpenModal}>
               {props.memo.memoContent}
-              <Modal visible={isModalVisible} />
+              <Modal
+                visible={isModalVisible}
+                memoDate={moment(props.memo.createdAt).format('MM.DD')}
+                memoContent={props.memo.memoContent}
+                memoFolderColor={props.memo.folderColor}
+                memoFolderTitle={props.memo.folderTitle}
+              />
             </div>
             <div css={tagSection}>
               <Tag color={props.memo.folderColor} text={props.memo.folderTitle} />

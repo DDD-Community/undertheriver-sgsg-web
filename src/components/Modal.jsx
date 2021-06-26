@@ -45,26 +45,26 @@ const ModalWrapper = css`
   }
 `;
 
-export default function CardModal({ visible }) {
+export default function CardModal(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
-    if (visible) onOpen();
+    if (props.visible) onOpen();
     else onClose();
-  }, [visible]);
+  }, [props.visible]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent css={ModalWrapper}>
         <ModalHeader className="header">
-          <Folder color={'#2DA5D7'} />
-          <span className="title">DDD</span>
+          <Folder color={props.memoFolderColor} />
+          <span className="title">{props.memoFolderTitle}</span>
         </ModalHeader>
         <ModalCloseButton mt={6} mr={6} />
         <ModalBody className="body">
-          <p>03.02</p>
+          <p>{props.memoDate}</p>
           <hr className="divider" />
-          <p>메모 내용 메모 내용</p>
+          <p>{props.memoContent}</p>
         </ModalBody>
         <ModalFooter className="footer">
           <button onClick={onClose} className="edit-btn">
