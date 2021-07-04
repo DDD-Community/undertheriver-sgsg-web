@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import Folder from './Folder';
+import ArrowDown from '../assets/img/arrow-down.svg';
+import ArrowUp from '../assets/img/arrow-up.svg';
+import FolderSortMenu from './FolderSortMenu';
 
 const folderListWrapper = css`
   .menu-wrapper {
@@ -41,12 +44,24 @@ const folderListWrapper = css`
       line-height: 23px;
       margin-left: 1rem;
       color: #888888;
+      user-select: none;
     }
 
     .sortable-menu {
-      align-self: center;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .sortable-label {
       font-size: 0.875rem;
       line-height: 20px;
+      padding-right: 0.625rem;
+      user-select: none;
+    }
+
+    .sortable-arrow {
+      user-select: none;
     }
   }
 
@@ -82,9 +97,33 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
+  const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
+  const [sortLabel, setSortLabel] = useState('생성순');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const sortMenuRef = useRef(null);
+
+  useEffect(() => {
+    let sortType = '';
+    switch (sortLabel) {
+      case '이름순':
+        sortType = 'NAME';
+        break;
+      case '생성순':
+        sortType = 'CREATED_AT';
+        break;
+      case '메모 개수순':
+        sortType = 'MEMO';
+        break;
+      default:
+        sortType = 'CREATED_AT';
+    }
+    props.setSortType(sortType);
+  }, [sortLabel]);
+
   const onClickFolder = (title, id = null) => {
     props.setSelectedFolder({ title: title, id: id });
   };
+
   const renderFolderList = () => {
     let html = [];
 
@@ -126,7 +165,18 @@ function FolderList(props) {
           </div>
           <span className="menu-title">사각박스</span>
         </div>
-        <p className="sortable-menu">이름순</p>
+        <div className="sortable-menu" ref={sortMenuRef} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <p className="sortable-label">{sortLabel}</p>
+          <img className="sortable-arrow" src={isMenuOpen ? ArrowUp : ArrowDown} />
+          {isMenuOpen && (
+            <FolderSortMenu
+              menu={menu}
+              sortLabel={sortLabel}
+              setSortLabel={setSortLabel}
+              leftPosition={sortMenuRef.current.offsetLeft}
+            />
+          )}
+        </div>
       </div>
       <ul>{renderFolderList()}</ul>
     </section>

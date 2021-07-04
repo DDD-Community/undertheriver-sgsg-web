@@ -92,6 +92,7 @@ const Main = () => {
   const [folderList, setFolderList] = useState([]);
   const [allMemoLength, setAllMemoLength] = useState(0);
   const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null });
+  const [sortType, setSortType] = useState('CREATED_AT');
   const [cards, setCards] = useState([
     {
       createdAt: '',
@@ -104,12 +105,12 @@ const Main = () => {
       thumbnailUrl: '',
     },
   ]);
+
   const [isSearchBar] = useState(localStorage.getItem('search_bar'));
   const buttonRef = useRef();
 
   useEffect(() => {
     userInfoApi();
-    checkFolderApi();
     listMemoApi();
   }, []);
 
@@ -121,6 +122,10 @@ const Main = () => {
     });
     listMemoApi(selectedFolder.id);
   }, [selectedFolder]);
+
+  useEffect(() => {
+    checkFolderApi();
+  }, [sortType]);
 
   const memoWrite = () => {
     if (buttonRef.current !== null) {
@@ -187,39 +192,6 @@ const Main = () => {
     }
   };
 
-  const checkFolderApi = () => {
-    try {
-      setLoading(true);
-      Api.checkFolder('CREATED_AT')
-        .then((response) => {
-          setLoading(false);
-          if (response.status === 200) {
-            const data = response.data;
-            if (data.success) {
-              let memoLength = 0;
-              for (let i = 0; i < data.response.length; i++) {
-                memoLength += data.response[i].memoCount;
-              }
-              setAllMemoLength(memoLength);
-              setFolderList(data.response);
-            } else {
-              setErrorPopup({ active: 'active', content: defaultMsg });
-            }
-          } else {
-            setErrorPopup({ active: 'active', content: defaultMsg });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setErrorPopup({ active: 'active', content: defaultMsg });
-        });
-    } catch (e) {
-      setLoading(false);
-      setErrorPopup({ active: 'active', content: defaultMsg });
-    }
-  };
-
   const listMemoApi = (folderId) => {
     try {
       const obj = {
@@ -252,6 +224,39 @@ const Main = () => {
     }
   };
 
+  const checkFolderApi = () => {
+    try {
+      setLoading(true);
+      Api.checkFolder(sortType)
+        .then((response) => {
+          setLoading(false);
+          if (response.status === 200) {
+            const data = response.data;
+            if (data.success) {
+              let memoLength = 0;
+              for (let i = 0; i < data.response.length; i++) {
+                memoLength += data.response[i].memoCount;
+              }
+              setAllMemoLength(memoLength);
+              setFolderList(data.response);
+            } else {
+              setErrorPopup({ active: 'active', content: defaultMsg });
+            }
+          } else {
+            setErrorPopup({ active: 'active', content: defaultMsg });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setErrorPopup({ active: 'active', content: defaultMsg });
+        });
+    } catch (e) {
+      setLoading(false);
+      setErrorPopup({ active: 'active', content: defaultMsg });
+    }
+  };
+
   return (
     <>
       <GNB />
@@ -264,6 +269,7 @@ const Main = () => {
           <aside className="aside-wrapper">
             <FolderList
               folderList={folderList}
+              setSortType={setSortType}
               allMemoLength={allMemoLength}
               setSelectedFolder={setSelectedFolder}
             />
