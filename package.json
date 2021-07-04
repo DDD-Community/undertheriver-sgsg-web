@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@svgr/cli": "^5.5.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "axios": "^0.21.1",
@@ -68,6 +69,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "history": "^5.0.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "react-query": "^3.18.1"
   }
 }

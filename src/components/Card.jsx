@@ -4,8 +4,8 @@ import { Box, useDisclosure } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import Tag from './Tag';
-import Modal from './Modal';
-import CardMenu from './CardMenu';
+import Modal from '../components/Modal';
+import CardMenu from '../components/CardMenu';
 import Badge from './Badge';
 import MoreBtn from '../assets/img/more.svg';
 

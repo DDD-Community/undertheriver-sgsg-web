@@ -74,9 +74,9 @@ const boxWrapper = css`
   }
 `;
 
-function Folder({ color }) {
+function Folder({ color }: { color: string }) {
   return (
-    <div className={folderWrapper}>
+    <div css={folderWrapper}>
       <div css={headerWrapper} className={color}></div>
       <div css={boxWrapper} className={color}>
         <hr css={squareLine} />

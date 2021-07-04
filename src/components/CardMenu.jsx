@@ -3,7 +3,6 @@ import { Box } from '@chakra-ui/react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Card from './Card';
 
 const menuWrapper = css`
   position: absolute;
