@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import Folder from './Folder';
+import ArrowDown from '../assets/img/arrow-down.svg';
+import ArrowUp from '../assets/img/arrow-up.svg';
+import FolderSortMenu from './FolderSortMenu';
 
 const folderListWrapper = css`
   .menu-wrapper {
@@ -41,12 +44,25 @@ const folderListWrapper = css`
       line-height: 23px;
       margin-left: 1rem;
       color: #888888;
+      user-select: none;
     }
 
     .sortable-menu {
-      align-self: center;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .sortable-label {
       font-size: 0.875rem;
       line-height: 20px;
+      padding-right: 0.625rem;
+      user-select: none;
+    }
+
+    .sortable-arrow {
+      padding: 0.5rem 0;
+      user-select: none;
     }
   }
 
@@ -82,9 +98,57 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
-  const onClickFolder = (title, id = null) => {
-    props.setSelectedFolder({ title: title, id: id });
+  const tempSortType = localStorage.getItem('sort_type');
+  let tempSortLabel =
+    tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
+  const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
+  const [folderList, setFolderList] = useState([]);
+  const [orderType, setOrderType] = useState({
+    flag: false,
+    type: 'ASC',
+  });
+  const [sortLabel, setSortLabel] = useState(tempSortLabel ? tempSortLabel : '생성순');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const sortMenuRef = useRef(null);
+
+  useEffect(() => {
+    let sortType = '';
+    switch (sortLabel) {
+      case '이름순':
+        sortType = 'NAME';
+        break;
+      case '생성순':
+        sortType = 'CREATED_AT';
+        break;
+      case '메모 개수순':
+        sortType = 'MEMO';
+        break;
+      default:
+        sortType = 'CREATED_AT';
+    }
+    localStorage.setItem('sort_type', sortType);
+    props.setSortType(sortType);
+    setIsMenuOpen(false);
+  }, [sortLabel]);
+
+  useEffect(() => {
+    if (props.folderList) {
+      setFolderList(props.folderList);
+    }
+  }, [props.folderList]);
+
+  useEffect(() => {
+    if (orderType.flag) {
+      let tempList = folderList.reverse();
+      setFolderList(tempList);
+    }
+    setOrderType({ ...orderType, flag: false });
+  }, [orderType.flag]);
+
+  const onClickFolder = (title, id = null, length) => {
+    props.setSelectedFolder({ title: title, id: id, length: length });
   };
+
   const renderFolderList = () => {
     let html = [];
 
@@ -93,7 +157,11 @@ function FolderList(props) {
         return html;
       }
       html.push(
-        <li key={Math.random()} className="folder-list" onClick={() => onClickFolder('전체')}>
+        <li
+          key={Math.random()}
+          className="folder-list"
+          onClick={() => onClickFolder('전체', null, props.allMemoLength)}
+        >
           <div className="folder-item">
             <Folder color="black" /> <span className="label">전체</span>
           </div>
@@ -101,9 +169,13 @@ function FolderList(props) {
         </li>,
       );
 
-      props.folderList.map((d) => {
+      folderList.map((d) => {
         html.push(
-          <li key={d.id} className="folder-list" onClick={() => onClickFolder(d.title, d.id)}>
+          <li
+            key={d.id}
+            className="folder-list"
+            onClick={() => onClickFolder(d.title, d.id, d.memoCount)}
+          >
             <div className="folder-item">
               <Folder color={d.color} /> <span className="label">{d.title}</span>
             </div>
@@ -126,7 +198,29 @@ function FolderList(props) {
           </div>
           <span className="menu-title">사각박스</span>
         </div>
-        <p className="sortable-menu">이름순</p>
+        <div className="sortable-menu" ref={sortMenuRef}>
+          <p className="sortable-label" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {sortLabel}
+          </p>
+          <img
+            className="sortable-arrow"
+            src={orderType.type === 'ASC' ? ArrowDown : ArrowUp}
+            onClick={() =>
+              setOrderType({
+                flag: !orderType.flag,
+                type: orderType.type === 'ASC' ? 'DESC' : 'ASC',
+              })
+            }
+          />
+          {isMenuOpen && (
+            <FolderSortMenu
+              menu={menu}
+              sortLabel={sortLabel}
+              setSortLabel={setSortLabel}
+              leftPosition={sortMenuRef.current.offsetLeft}
+            />
+          )}
+        </div>
       </div>
       <ul>{renderFolderList()}</ul>
     </section>

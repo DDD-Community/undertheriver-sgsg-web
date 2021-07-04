@@ -138,8 +138,20 @@ const Popup = (props: any) => {
     if (content !== '') {
       setErrorPopup({ active: 'active', content: content });
     } else {
-      writeMemoApi();
+      checkOverlapId();
     }
+  };
+
+  const checkOverlapId = () => {
+    let folderId: any = null;
+    if (props.folderList) {
+      for (let i = 0; i < props.folderList.length; i++) {
+        if (props.folderList[i].title === selectKeyword[0]) {
+          folderId = props.folderList[i].id;
+        }
+      }
+    }
+    writeMemoApi(folderId);
   };
 
   const checkfolderColor = () => {
@@ -188,12 +200,13 @@ const Popup = (props: any) => {
     }
   };
 
-  const writeMemoApi = () => {
+  const writeMemoApi = (folderId?: any) => {
     try {
       const obj = {
         memoContent: memo.value,
         folderColor: memo.nextColor,
         folderTitle: selectKeyword[0],
+        folderId: folderId ? folderId : null,
       };
       setLoading(true);
       Api.createMemo(obj)
@@ -204,7 +217,8 @@ const Popup = (props: any) => {
             if (data.success) {
               checkfolderColor();
               es.play();
-              // todo redirect main
+              props.setUpdateFlag(true);
+              setSelectKeyword([]);
             } else {
               setErrorPopup({ active: 'active', content: defaultMsg });
             }
@@ -257,6 +271,7 @@ const Popup = (props: any) => {
               color={memo.nextColor}
               selectKeyword={selectKeyword}
               setSelectKeyword={setSelectKeyword}
+              folderList={props.folderList}
             />
             <Button css={saveButton} onClick={() => writePopupResult('submit')}>
               저장

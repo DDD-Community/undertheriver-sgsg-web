@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
@@ -14,7 +14,7 @@ const pinInputField = css`
 const PasswordField = () => {
   return (
     <div>
-      <PinInput type="alphanumeric" mask>
+      <PinInput type="alphanumeric" mask autoFocus>
         <PinInputField css={pinInputField} />
         <PinInputField css={pinInputField} />
         <PinInputField css={pinInputField} />

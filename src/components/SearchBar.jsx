@@ -21,6 +21,7 @@ const SearchBarField = css`
     background-repeat: no-repeat;
     border-radius: 1.75rem;
     padding-left: 4.25rem;
+    padding-right: 4.25rem;
   }
 
   .search-input::placeholder {
@@ -39,6 +40,7 @@ const SearchBar = () => {
   useEffect(() => {
     searchInputRef?.current.focus();
   }, []);
+
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && searchInput !== '') {
       searchGoogle();

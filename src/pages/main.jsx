@@ -91,7 +91,11 @@ const Main = () => {
   });
   const [folderList, setFolderList] = useState([]);
   const [allMemoLength, setAllMemoLength] = useState(0);
-  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null });
+  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null, length: 0 });
+  const [sortType, setSortType] = useState(
+    localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATE_AT',
+  );
+  const [updateFlag, setUpdateFlag] = useState(false);
   const [cards, setCards] = useState([
     {
       createdAt: '',
@@ -104,23 +108,37 @@ const Main = () => {
       thumbnailUrl: '',
     },
   ]);
+
   const [isSearchBar] = useState(localStorage.getItem('search_bar'));
   const buttonRef = useRef();
 
   useEffect(() => {
     userInfoApi();
-    checkFolderApi();
     listMemoApi();
   }, []);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    listMemoApi(selectedFolder.id);
+    if (selectedFolder.id) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+      listMemoApi(selectedFolder.id);
+    }
   }, [selectedFolder]);
+
+  useEffect(() => {
+    checkFolderApi();
+  }, [sortType]);
+
+  useEffect(() => {
+    if (updateFlag) {
+      checkFolderApi();
+      listMemoApi();
+      setUpdateFlag(false);
+    }
+  }, [updateFlag]);
 
   const memoWrite = () => {
     if (buttonRef.current !== null) {
@@ -187,39 +205,6 @@ const Main = () => {
     }
   };
 
-  const checkFolderApi = () => {
-    try {
-      setLoading(true);
-      Api.checkFolder('CREATED_AT')
-        .then((response) => {
-          setLoading(false);
-          if (response.status === 200) {
-            const data = response.data;
-            if (data.success) {
-              let memoLength = 0;
-              for (let i = 0; i < data.response.length; i++) {
-                memoLength += data.response[i].memoCount;
-              }
-              setAllMemoLength(memoLength);
-              setFolderList(data.response);
-            } else {
-              setErrorPopup({ active: 'active', content: defaultMsg });
-            }
-          } else {
-            setErrorPopup({ active: 'active', content: defaultMsg });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setErrorPopup({ active: 'active', content: defaultMsg });
-        });
-    } catch (e) {
-      setLoading(false);
-      setErrorPopup({ active: 'active', content: defaultMsg });
-    }
-  };
-
   const listMemoApi = (folderId) => {
     try {
       const obj = {
@@ -252,6 +237,39 @@ const Main = () => {
     }
   };
 
+  const checkFolderApi = () => {
+    try {
+      setLoading(true);
+      Api.checkFolder(sortType)
+        .then((response) => {
+          setLoading(false);
+          if (response.status === 200) {
+            const data = response.data;
+            if (data.success) {
+              let memoLength = 0;
+              for (let i = 0; i < data.response.length; i++) {
+                memoLength += data.response[i].memoCount;
+              }
+              setAllMemoLength(memoLength);
+              setFolderList(data.response);
+            } else {
+              setErrorPopup({ active: 'active', content: defaultMsg });
+            }
+          } else {
+            setErrorPopup({ active: 'active', content: defaultMsg });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setErrorPopup({ active: 'active', content: defaultMsg });
+        });
+    } catch (e) {
+      setLoading(false);
+      setErrorPopup({ active: 'active', content: defaultMsg });
+    }
+  };
+
   return (
     <>
       <GNB />
@@ -264,6 +282,7 @@ const Main = () => {
           <aside className="aside-wrapper">
             <FolderList
               folderList={folderList}
+              setSortType={setSortType}
               allMemoLength={allMemoLength}
               setSelectedFolder={setSelectedFolder}
             />
@@ -272,8 +291,9 @@ const Main = () => {
             <div className="header">
               <h2 className="folder-name">
                 {selectedFolder.title}
-                {/* Todo 폴더 메모 갯수 수정사항 */}
-                <span className="folder-count">{allMemoLength}</span>
+                <span className="folder-count">
+                  {selectedFolder.length !== 0 ? selectedFolder.length : allMemoLength}
+                </span>
               </h2>
               <button onClick={() => memoWrite()} ref={buttonRef}>
                 <figure>
@@ -287,7 +307,14 @@ const Main = () => {
           </div>
         </section>
       </main>
-      {writePopup.flag && <Popup writePopup={writePopup} setWritePopup={setWritePopup} />}
+      {writePopup.flag && (
+        <Popup
+          writePopup={writePopup}
+          setWritePopup={setWritePopup}
+          folderList={folderList}
+          setUpdateFlag={setUpdateFlag}
+        />
+      )}
       <ErrorPopup
         active={errorPopup.active}
         content={errorPopup.content}
@@ -296,5 +323,4 @@ const Main = () => {
     </>
   );
 };
-
 export default Main;
