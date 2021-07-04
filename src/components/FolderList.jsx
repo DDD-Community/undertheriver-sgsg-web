@@ -101,7 +101,8 @@ function FolderList(props) {
   let tempSortLabel =
     tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
   const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
-
+  const [folderList, setFolderList] = useState([]);
+  const [orderType, setOrderType] = useState(false);
   const [sortLabel, setSortLabel] = useState(tempSortLabel ? tempSortLabel : '생성순');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const sortMenuRef = useRef(null);
@@ -123,7 +124,22 @@ function FolderList(props) {
     }
     localStorage.setItem('sort_type', sortType);
     props.setSortType(sortType);
+    setIsMenuOpen(false);
   }, [sortLabel]);
+
+  useEffect(() => {
+    if (props.folderList) {
+      setFolderList(props.folderList);
+    }
+  }, [props.folderList]);
+
+  useEffect(() => {
+    if (orderType) {
+      let tempList = folderList.reverse();
+      setFolderList(tempList);
+      setOrderType(false);
+    }
+  }, [orderType]);
 
   const onClickFolder = (title, id = null) => {
     props.setSelectedFolder({ title: title, id: id });
@@ -145,7 +161,7 @@ function FolderList(props) {
         </li>,
       );
 
-      props.folderList.map((d) => {
+      folderList.map((d) => {
         html.push(
           <li key={d.id} className="folder-list" onClick={() => onClickFolder(d.title, d.id)}>
             <div className="folder-item">
@@ -170,9 +186,15 @@ function FolderList(props) {
           </div>
           <span className="menu-title">사각박스</span>
         </div>
-        <div className="sortable-menu" ref={sortMenuRef} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <p className="sortable-label">{sortLabel}</p>
-          <img className="sortable-arrow" src={isMenuOpen ? ArrowUp : ArrowDown} />
+        <div className="sortable-menu" ref={sortMenuRef}>
+          <p className="sortable-label" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {sortLabel}
+          </p>
+          <img
+            className="sortable-arrow"
+            src={orderType ? ArrowUp : ArrowDown}
+            onClick={() => setOrderType(!orderType)}
+          />
           {isMenuOpen && (
             <FolderSortMenu
               menu={menu}

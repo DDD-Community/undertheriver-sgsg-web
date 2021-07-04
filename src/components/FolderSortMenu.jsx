@@ -45,10 +45,9 @@ const FolderSortMenu = ({ menu, sortLabel, setSortLabel, leftPosition }) => {
         boxShadow: '0px 10px 16px rgba(211, 207, 197, 0.7)',
         borderRadius: '4px',
         top: '270px',
-        left: `${leftPosition}`,
+        left: `${leftPosition - 130}px`,
         marginRight: '20px',
-        zIndex: '10',
-        // padding: '1.5rem',
+        zIndex: '18',
       }}
     >
       {menuList}
