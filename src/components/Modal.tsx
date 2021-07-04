@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Folder from './Folder';
+import Folder from '../components/Folder';
 
 const ModalWrapper = css`
   max-width: 45rem;
@@ -45,7 +45,13 @@ const ModalWrapper = css`
   }
 `;
 
-export default function CardModal(props) {
+export default function CardModal(props: {
+  visible: any;
+  memoFolderColor: string;
+  memoFolderTitle: React.ReactNode;
+  memoDate: React.ReactNode;
+  memoContent: React.ReactNode;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
     if (props.visible) onOpen();

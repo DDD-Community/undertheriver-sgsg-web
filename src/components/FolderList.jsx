@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Folder from './Folder';
+import Folder from '../components/Folder';
 import ArrowDown from '../assets/img/arrow-down.svg';
 import ArrowUp from '../assets/img/arrow-up.svg';
 import FolderSortMenu from './FolderSortMenu';
