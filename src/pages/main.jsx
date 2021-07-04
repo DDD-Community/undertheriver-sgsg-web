@@ -93,7 +93,7 @@ const Main = () => {
   const [allMemoLength, setAllMemoLength] = useState(0);
   const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null, length: 0 });
   const [sortType, setSortType] = useState(
-    localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATE_AT',
+    localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATED_AT',
   );
   const [updateFlag, setUpdateFlag] = useState(false);
   const [cards, setCards] = useState([
