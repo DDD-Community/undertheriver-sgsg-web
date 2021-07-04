@@ -92,7 +92,10 @@ const Main = () => {
   const [folderList, setFolderList] = useState([]);
   const [allMemoLength, setAllMemoLength] = useState(0);
   const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null });
-  const [sortType, setSortType] = useState('CREATED_AT');
+  const [sortType, setSortType] = useState(
+    localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATE_AT',
+  );
+  const [updateFlag, setUpdateFlag] = useState(false);
   const [cards, setCards] = useState([
     {
       createdAt: '',
@@ -115,17 +118,27 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    listMemoApi(selectedFolder.id);
+    if (selectedFolder.id) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+      listMemoApi(selectedFolder.id);
+    }
   }, [selectedFolder]);
 
   useEffect(() => {
     checkFolderApi();
   }, [sortType]);
+
+  useEffect(() => {
+    if (updateFlag) {
+      checkFolderApi();
+      listMemoApi();
+      setUpdateFlag(false);
+    }
+  }, [updateFlag]);
 
   const memoWrite = () => {
     if (buttonRef.current !== null) {
@@ -293,7 +306,14 @@ const Main = () => {
           </div>
         </section>
       </main>
-      {writePopup.flag && <Popup writePopup={writePopup} setWritePopup={setWritePopup} />}
+      {writePopup.flag && (
+        <Popup
+          writePopup={writePopup}
+          setWritePopup={setWritePopup}
+          folderList={folderList}
+          setUpdateFlag={setUpdateFlag}
+        />
+      )}
       <ErrorPopup
         active={errorPopup.active}
         content={errorPopup.content}
@@ -302,5 +322,4 @@ const Main = () => {
     </>
   );
 };
-
 export default Main;

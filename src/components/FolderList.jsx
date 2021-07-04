@@ -97,8 +97,12 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
+  const tempSortType = localStorage.getItem('sort_type');
+  let tempSortLabel =
+    tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
   const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
-  const [sortLabel, setSortLabel] = useState('생성순');
+
+  const [sortLabel, setSortLabel] = useState(tempSortLabel ? tempSortLabel : '생성순');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const sortMenuRef = useRef(null);
 
@@ -117,6 +121,7 @@ function FolderList(props) {
       default:
         sortType = 'CREATED_AT';
     }
+    localStorage.setItem('sort_type', sortType);
     props.setSortType(sortType);
   }, [sortLabel]);
 

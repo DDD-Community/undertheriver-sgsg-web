@@ -102,15 +102,18 @@ const closeTagBtn = css`
 
 function TagInput(props: any) {
   const [keyword, setKeyword] = useState('');
-  const [tempArr, setTempArr] = useState<any>([]);
+  const [folderListArr, setFolderListArr] = useState<any>([]);
   const [findFlag, setFindFlag] = useState(false);
   const [tagFlag, setTagFlag] = useState(false);
   const [selectPosition, setSelectPosition] = useState(0);
 
   useEffect(() => {
-    //TODO get folder name list API
-    setTempArr(['디자인', '여행', '맛집', '강아래팀', '강아래']);
-  }, []);
+    const tempArr: any = [];
+    props.folderList.map((item: any) => {
+      tempArr.push(item.title);
+    });
+    setFolderListArr(tempArr);
+  }, [props.folderList]);
 
   useEffect(() => {
     if (keyword !== '') {
@@ -122,7 +125,7 @@ function TagInput(props: any) {
   const keywordFind = () => {
     const tempKey: any = [];
 
-    tempArr.map((item: any) => {
+    folderListArr.map((item: any) => {
       if (keyword === '') {
         return;
       } else if (item.includes(keyword)) {
