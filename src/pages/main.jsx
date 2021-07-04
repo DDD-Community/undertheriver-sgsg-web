@@ -7,6 +7,7 @@ import Card from '../components/Card';
 import Popup from '../components/Popup';
 import NewMemoBtn from '../assets/img/newMemo.svg';
 import FolderList from '../components/FolderList';
+import SearchBar from '../components/SearchBar';
 import Api, { checkFolder, userInfo } from '../api/api';
 import ErrorPopup from '../components/ErrorPopup';
 
@@ -21,7 +22,7 @@ const pageWrapper = css`
     height: 100%;
     margin: auto;
     justify-content: space-between;
-    padding-top: 5rem;
+    //padding-top: 5rem;
     padding-bottom: 13.75rem;
   }
 
@@ -103,6 +104,7 @@ const Main = () => {
       thumbnailUrl: '',
     },
   ]);
+  const [isSearchBar] = useState(localStorage.getItem('search_bar'));
   const buttonRef = useRef();
 
   useEffect(() => {
@@ -112,6 +114,11 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
     listMemoApi(selectedFolder.id);
   }, [selectedFolder]);
 
@@ -249,7 +256,11 @@ const Main = () => {
     <>
       <GNB />
       <main css={pageWrapper}>
-        <section className="content-wrapper">
+        {isSearchBar === 'true' && <SearchBar />}
+        <section
+          className="content-wrapper"
+          css={{ paddingTop: isSearchBar === 'true' ? '1rem' : '5rem' }}
+        >
           <aside className="aside-wrapper">
             <FolderList
               folderList={folderList}

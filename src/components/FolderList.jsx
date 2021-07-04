@@ -66,7 +66,11 @@ const folderListWrapper = css`
       align-items: center;
 
       .label {
+        width: 110px;
         margin-left: 0.75rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 

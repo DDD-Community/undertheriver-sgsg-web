@@ -20,7 +20,7 @@ const pageWrapper = css`
     width: 62.5%;
     margin: auto;
     padding-top: 10.625rem;
-    padding-bottom: 25vh;
+    padding-bottom: 10vh;
   }
 
   .page-title {
@@ -28,16 +28,41 @@ const pageWrapper = css`
     font-weight: bold;
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
+    user-select: none;
   }
 
   .list-wrapper {
-    color: #3c3a37;
     display: flex;
     justify-content: space-between;
     width: 50rem;
     height: 10rem;
     align-items: center;
     border-bottom: 1px solid rgba(165, 170, 178, 0.5);
+  }
+
+  .list-wrapper h4 {
+    margin-bottom: 0.563rem;
+    color: #3c3a37;
+    font-size: 1rem;
+    font-weight: 400;
+    user-select: none;
+  }
+
+  .list-wrapper span {
+    color: #3c3a37;
+    opacity: 0.6;
+    font-size: 1rem;
+    font-weight: 400;
+    user-select: none;
+  }
+
+  .setting-btn {
+    padding: 0.313rem 1.5rem;
+    color: #f7f7f7;
+    font-size: 0.875rem;
+    font-weight: 700;
+    background: rgba(93, 101, 113, 0.3);
+    border-radius: 0.25rem;
   }
 
   .logout-btn {
@@ -67,16 +92,34 @@ const pageWrapper = css`
 const Setting = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [email] = useState(JSON.parse(localStorage.getItem('user')).email);
+  const [isSearchBarCheck, setIsSearchBarCheck] = useState(false);
+  const [isExtensionUse, setIsExtensionUse] = useState(false);
+
+  useEffect(() => {
+    setIsSearchBarCheck(localStorage.getItem('search_bar') === 'true');
+    setIsExtensionUse(localStorage.getItem('use_extension') === 'true');
+  }, []);
 
   function onOpenModal() {
     setIsModalVisible(true);
   }
+
+  const searchBarCheck = (flag) => {
+    localStorage.setItem('search_bar', flag);
+    setIsSearchBarCheck(flag);
+  };
+
+  const extensionCheck = (flag) => {
+    localStorage.setItem('use_extension', flag);
+    setIsExtensionUse(flag);
+  };
 
   const userLogout = () => {
     localStorage.clear();
     if (process.env.NODE_ENV === 'production') window.location.href = 'https://sgsg.space/login';
     else window.location.href = 'http://localhost:3000/login';
   };
+
   return (
     <>
       <GNB />
@@ -84,19 +127,42 @@ const Setting = () => {
         <div className="content-wrapper">
           <h3 className="page-title">설정</h3>
           <div className="list-wrapper">
-            연동 이메일
+            <h4>연동 이메일</h4>
             <div className="email-account">{email}</div>
           </div>
           <div className="list-wrapper">
-            메모 비밀번호 설정
+            <div>
+              <h4>메모 비밀번호 설정</h4>
+              <span>현재 비밀번호가 설정되어있어요.</span>
+            </div>
             <button className="setting-btn" onClick={onOpenModal}>
               비밀번호 변경
             </button>
             <PasswordInputModal visible={isModalVisible} onChange={setIsModalVisible} />
           </div>
           <div className="list-wrapper">
-            새 탭에서 시작
-            <Switch size="lg" />
+            <div>
+              <h4>크롬 검색바 노출</h4>
+              <span>메인 화면에서 검색바를 보여줄까요?</span>
+            </div>
+            <Switch
+              size="lg"
+              colorScheme="gray"
+              isChecked={isSearchBarCheck}
+              onChange={() => searchBarCheck(!isSearchBarCheck)}
+            />
+          </div>
+          <div className="list-wrapper">
+            <div>
+              <h4>새 탭에서 시작</h4>
+              <span>더 빠르게 사각사각 해볼까요?</span>
+            </div>
+            <Switch
+              size="lg"
+              colorScheme="gray"
+              isChecked={isExtensionUse}
+              onChange={() => extensionCheck(!isExtensionUse)}
+            />
           </div>
           <button className="logout-btn" onClick={userLogout}>
             로그아웃
