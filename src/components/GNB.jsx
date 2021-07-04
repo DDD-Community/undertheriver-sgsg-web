@@ -11,7 +11,7 @@ const gnbWrapper = css`
   width: 100%;
   background: #f9f7f2;
   position: fixed;
-  z-index: 10;
+  z-index: 19;
   border-bottom: 1px solid rgba(165, 170, 178, 0.3);
 
   .main-logo {
