@@ -91,7 +91,7 @@ const Main = () => {
   });
   const [folderList, setFolderList] = useState([]);
   const [allMemoLength, setAllMemoLength] = useState(0);
-  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null });
+  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null, length: 0 });
   const [sortType, setSortType] = useState(
     localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATE_AT',
   );
@@ -291,8 +291,9 @@ const Main = () => {
             <div className="header">
               <h2 className="folder-name">
                 {selectedFolder.title}
-                {/* Todo 폴더 메모 갯수 수정사항 */}
-                <span className="folder-count">{allMemoLength}</span>
+                <span className="folder-count">
+                  {selectedFolder.length !== 0 ? selectedFolder.length : allMemoLength}
+                </span>
               </h2>
               <button onClick={() => memoWrite()} ref={buttonRef}>
                 <figure>

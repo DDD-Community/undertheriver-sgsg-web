@@ -61,6 +61,7 @@ const folderListWrapper = css`
     }
 
     .sortable-arrow {
+      padding: 0.5rem 0;
       user-select: none;
     }
   }
@@ -102,7 +103,10 @@ function FolderList(props) {
     tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
   const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
   const [folderList, setFolderList] = useState([]);
-  const [orderType, setOrderType] = useState(false);
+  const [orderType, setOrderType] = useState({
+    flag: false,
+    type: 'ASC',
+  });
   const [sortLabel, setSortLabel] = useState(tempSortLabel ? tempSortLabel : '생성순');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const sortMenuRef = useRef(null);
@@ -134,15 +138,15 @@ function FolderList(props) {
   }, [props.folderList]);
 
   useEffect(() => {
-    if (orderType) {
+    if (orderType.flag) {
       let tempList = folderList.reverse();
       setFolderList(tempList);
-      setOrderType(false);
     }
-  }, [orderType]);
+    setOrderType({ ...orderType, flag: false });
+  }, [orderType.flag]);
 
-  const onClickFolder = (title, id = null) => {
-    props.setSelectedFolder({ title: title, id: id });
+  const onClickFolder = (title, id = null, length) => {
+    props.setSelectedFolder({ title: title, id: id, length: length });
   };
 
   const renderFolderList = () => {
@@ -153,7 +157,11 @@ function FolderList(props) {
         return html;
       }
       html.push(
-        <li key={Math.random()} className="folder-list" onClick={() => onClickFolder('전체')}>
+        <li
+          key={Math.random()}
+          className="folder-list"
+          onClick={() => onClickFolder('전체', null, props.allMemoLength)}
+        >
           <div className="folder-item">
             <Folder color="black" /> <span className="label">전체</span>
           </div>
@@ -163,7 +171,11 @@ function FolderList(props) {
 
       folderList.map((d) => {
         html.push(
-          <li key={d.id} className="folder-list" onClick={() => onClickFolder(d.title, d.id)}>
+          <li
+            key={d.id}
+            className="folder-list"
+            onClick={() => onClickFolder(d.title, d.id, d.memoCount)}
+          >
             <div className="folder-item">
               <Folder color={d.color} /> <span className="label">{d.title}</span>
             </div>
@@ -192,8 +204,13 @@ function FolderList(props) {
           </p>
           <img
             className="sortable-arrow"
-            src={orderType ? ArrowUp : ArrowDown}
-            onClick={() => setOrderType(!orderType)}
+            src={orderType.type === 'ASC' ? ArrowDown : ArrowUp}
+            onClick={() =>
+              setOrderType({
+                flag: !orderType.flag,
+                type: orderType.type === 'ASC' ? 'DESC' : 'ASC',
+              })
+            }
           />
           {isMenuOpen && (
             <FolderSortMenu
