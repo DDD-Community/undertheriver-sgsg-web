@@ -5,6 +5,7 @@ import { css, jsx } from '@emotion/react';
 import Folder from './Folder';
 import ArrowDown from '../assets/img/arrow-down.svg';
 import ArrowUp from '../assets/img/arrow-up.svg';
+import LockIcon from '../assets/img/icon-lock.svg';
 import FolderSortMenu from './FolderSortMenu';
 
 const folderListWrapper = css`
@@ -94,6 +95,15 @@ const folderListWrapper = css`
       background: #ece9e3;
       border-radius: 4px;
     }
+
+    &.current {
+      background: #ece9e3;
+      border-radius: 4px;
+    }
+
+    .lock-btn {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -159,7 +169,7 @@ function FolderList(props) {
       html.push(
         <li
           key={Math.random()}
-          className="folder-list"
+          className={'folder-list' + (props.selectedFolder.title === '전체' ? ' current' : '')}
           onClick={() => onClickFolder('전체', null, props.allMemoLength)}
         >
           <div className="folder-item">
@@ -173,13 +183,17 @@ function FolderList(props) {
         html.push(
           <li
             key={d.id}
-            className="folder-list"
+            className={'folder-list' + (props.selectedFolder.id === d.id ? ' current' : '')}
             onClick={() => onClickFolder(d.title, d.id, d.memoCount)}
           >
             <div className="folder-item">
               <Folder color={d.color} /> <span className="label">{d.title}</span>
             </div>
-            <div className="count">{d.memoCount}</div>
+            {props.selectedFolder.id === d.id ? (
+              <img className="lock-btn" src={LockIcon} />
+            ) : (
+              <div className="count">{d.memoCount}</div>
+            )}
           </li>,
         );
       });

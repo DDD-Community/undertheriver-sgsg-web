@@ -44,7 +44,7 @@ const FolderSortMenu = ({ menu, sortLabel, setSortLabel, leftPosition }) => {
         background: 'white',
         boxShadow: '0px 10px 16px rgba(211, 207, 197, 0.7)',
         borderRadius: '4px',
-        top: '270px',
+        top: localStorage.getItem('search_bar') === 'true' ? '374px' : '270px',
         left: `${leftPosition - 130}px`,
         marginRight: '20px',
         zIndex: '18',

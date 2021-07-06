@@ -111,7 +111,7 @@ function Card(props) {
         <div css={innerCardWrapper}>
           <div className="content">
             <div css={headerSection}>
-              <span className="date">{moment(props.memo.createdAt).format('MM.DD')}</span>
+              <span className="date">{props.memo.createdAt}</span>
               {props.memo.favorite && <Badge color={props.memo.folderColor} className="badge" />}
               <span className="menu-btn" onClick={onOpenMenu}>
                 <img src={MoreBtn} />

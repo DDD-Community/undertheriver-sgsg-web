@@ -9,9 +9,14 @@ const tagWrapper = css`
   margin-bottom: 1rem;
   background-color: rgba(45, 165, 215, 0.2);
   color: #2da5d7;
-  width: 20%;
+  max-width: 5rem;
+  width: max-content;
+  font-size: 0.875rem;
   text-align: center;
-  line-height: 20px;
+  line-height: 1.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   &.BLUE {
     background-color: rgba(45, 165, 215, 0.2);

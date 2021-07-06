@@ -215,6 +215,7 @@ function TagInput(props: any) {
         placeholder={findFlag ? '' : '저장할 폴더의 이름을 입력하세요'}
         focusBorderColor="black"
         autoComplete="off"
+        maxLength={10}
         value={keyword}
         onBlur={() => handleFocusOut()}
         onKeyDown={(e) => handleKeyPress(e)}
