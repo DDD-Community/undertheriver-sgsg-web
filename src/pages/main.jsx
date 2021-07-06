@@ -114,18 +114,16 @@ const Main = () => {
 
   useEffect(() => {
     userInfoApi();
-    listMemoApi();
+    // listMemoApi();
   }, []);
 
   useEffect(() => {
-    if (selectedFolder.id) {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
-      listMemoApi(selectedFolder.id);
-    }
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+    listMemoApi(selectedFolder.id);
   }, [selectedFolder]);
 
   useEffect(() => {
@@ -210,7 +208,6 @@ const Main = () => {
       const obj = {
         folderId: folderId ? folderId : null,
       };
-
       setLoading(true);
       Api.listMemo(obj)
         .then((response) => {
@@ -284,6 +281,7 @@ const Main = () => {
               folderList={folderList}
               setSortType={setSortType}
               allMemoLength={allMemoLength}
+              selectedFolder={selectedFolder}
               setSelectedFolder={setSelectedFolder}
             />
           </aside>
