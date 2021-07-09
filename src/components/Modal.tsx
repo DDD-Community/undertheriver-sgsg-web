@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   useDisclosure,
   Modal,
@@ -12,6 +12,7 @@ import {
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import Folder from '../components/Folder';
+import { useModal } from '../hooks/UseModal';
 
 const ModalWrapper = css`
   max-width: 45rem;
@@ -45,38 +46,35 @@ const ModalWrapper = css`
   }
 `;
 
-export default function CardModal(props: {
-  visible: any;
-  memoFolderColor: string;
-  memoFolderTitle: React.ReactNode;
-  memoDate: React.ReactNode;
-  memoContent: React.ReactNode;
-}) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  useEffect(() => {
-    if (props.visible) onOpen();
-    else onClose();
-  }, [props.visible]);
+export default function CardModal() {
+  const {
+    isOpen,
+    handleCloseModal,
+    memoContent,
+    memoFolderTitle,
+    memoDate,
+    memoFolderColor,
+  } = useModal();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
       <ModalOverlay />
       <ModalContent css={ModalWrapper}>
         <ModalHeader className="header">
-          <Folder color={props.memoFolderColor} />
-          <span className="title">{props.memoFolderTitle}</span>
+          {/*<Folder color={memoFolderColor} />*/}
+          <span className="title">{memoFolderTitle}</span>
         </ModalHeader>
         <ModalCloseButton mt={6} mr={6} />
         <ModalBody className="body">
-          <p>{props.memoDate}</p>
+          <p>{memoDate}</p>
           <hr className="divider" />
-          <p>{props.memoContent}</p>
+          <p>{memoContent}</p>
         </ModalBody>
         <ModalFooter className="footer">
-          <button onClick={onClose} className="edit-btn">
+          <button onClick={handleCloseModal} className="edit-btn">
             수정
           </button>
-          <button onClick={onClose} className="close-btn">
+          <button onClick={handleCloseModal} className="close-btn">
             삭제
           </button>
         </ModalFooter>

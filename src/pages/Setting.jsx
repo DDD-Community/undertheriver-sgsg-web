@@ -5,8 +5,8 @@ import { css, jsx } from '@emotion/react';
 import { Switch } from '@chakra-ui/react';
 import GNB from '../components/GNB';
 import GoogleIcon from '../assets/img/icon-google.svg';
-import PasswordInput from '../components/PasswordInput';
 import PasswordInputModal from '../components/PasswordInputModal';
+import { useModal } from '../hooks/UseModal';
 
 const pageWrapper = css`
   background: #f9f7f2;
@@ -90,7 +90,7 @@ const pageWrapper = css`
   }
 `;
 const Setting = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { handleOpenModal } = useModal();
   const [email] = useState(JSON.parse(localStorage.getItem('user')).email);
   const [isSearchBarCheck, setIsSearchBarCheck] = useState(false);
   const [isExtensionUse, setIsExtensionUse] = useState(false);
@@ -99,10 +99,6 @@ const Setting = () => {
     setIsSearchBarCheck(localStorage.getItem('search_bar') === 'true');
     setIsExtensionUse(localStorage.getItem('use_extension') === 'true');
   }, []);
-
-  function onOpenModal() {
-    setIsModalVisible(true);
-  }
 
   const searchBarCheck = (flag) => {
     localStorage.setItem('search_bar', flag);
@@ -135,10 +131,10 @@ const Setting = () => {
               <h4>메모 비밀번호 설정</h4>
               <span>현재 비밀번호가 설정되어있어요.</span>
             </div>
-            <button className="setting-btn" onClick={onOpenModal}>
+            <button className="setting-btn" onClick={handleOpenModal}>
               비밀번호 변경
             </button>
-            <PasswordInputModal visible={isModalVisible} onChange={setIsModalVisible} />
+            <PasswordInputModal />
           </div>
           <div className="list-wrapper">
             <div>
