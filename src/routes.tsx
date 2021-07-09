@@ -4,6 +4,7 @@ import React from 'react';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import { ModalProvider } from './contexts/ModalContext';
 import Main from './pages/main';
 import PrivateRoute from './pages/PrivateRoute';
 import Login from './pages/Login';
@@ -15,16 +16,18 @@ const history = createBrowserHistory();
 
 const Root: React.FC = () => (
   <ChakraProvider resetCSS>
-    <BrowserRouter history={history}>
-      <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/after-login" component={AfterLogin} />
-        <PrivateRoute exact path="/" component={Main} />
-        <PrivateRoute exact path="/setting" component={Setting} />
-        <Route path="/error" component={NotFound} />
-        <Redirect path="*" to="/" /> *
-      </Switch>
-    </BrowserRouter>
+    <ModalProvider>
+      <BrowserRouter history={history}>
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/after-login" component={AfterLogin} />
+          <PrivateRoute exact path="/" component={Main} />
+          <PrivateRoute exact path="/setting" component={Setting} />
+          <Route path="/error" component={NotFound} />
+          <Redirect path="*" to="/" /> *
+        </Switch>
+      </BrowserRouter>
+    </ModalProvider>
   </ChakraProvider>
 );
 

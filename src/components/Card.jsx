@@ -8,6 +8,7 @@ import Modal from '../components/Modal';
 import CardMenu from '../components/CardMenu';
 import Badge from './Badge';
 import MoreBtn from '../assets/img/more.svg';
+import { useModal } from '../hooks/UseModal';
 
 const cardWrapper = css`
   padding-top: 100%;
@@ -77,12 +78,8 @@ const menu = [
 ];
 
 function Card(props) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { handleOpenModal } = useModal();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  function onOpenModal() {
-    setIsModalVisible(true);
-  }
 
   function onOpenMenu() {
     setIsMenuOpen(true);
@@ -105,6 +102,7 @@ function Card(props) {
 
   const wrapperRef = useRef(null);
   onCloseMenu(wrapperRef);
+
   return (
     <Box css={cardWrapper}>
       <div className="content">
@@ -122,10 +120,9 @@ function Card(props) {
                 <CardMenu menu={menu} />
               </div>
             )}
-            <div css={bodySection} onClick={onOpenModal}>
+            <div css={bodySection} onClick={handleOpenModal}>
               {props.memo.memoContent}
               <Modal
-                visible={isModalVisible}
                 memoDate={moment(props.memo.createdAt).format('MM.DD')}
                 memoContent={props.memo.memoContent}
                 memoFolderColor={props.memo.folderColor}

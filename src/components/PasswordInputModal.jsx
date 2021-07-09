@@ -13,6 +13,7 @@ import {
 import { css, jsx } from '@emotion/react';
 import Folder from '../components/Folder';
 import PasswordInput from '../components/PasswordInput';
+import { useModal } from '../hooks/UseModal';
 
 const ModalWrapper = css`
   max-width: 37.5rem;
@@ -38,18 +39,11 @@ const ModalWrapper = css`
   }
 `;
 
-export default function PasswordInputModal({ visible, onChange }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  useEffect(() => {
-    if (visible) onOpen();
-    else onClose();
-  }, [visible]);
-  useEffect(() => {
-    if (visible !== isOpen) onChange(isOpen);
-  }, [isOpen]);
+export default function PasswordInputModal() {
+  const { isOpen, handleCloseModal } = useModal();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
       <ModalOverlay />
       <ModalContent css={ModalWrapper}>
         <ModalHeader className="header"></ModalHeader>
@@ -57,7 +51,7 @@ export default function PasswordInputModal({ visible, onChange }) {
         <ModalBody className="body">
           <h3 className="title">현재 비밀번호를 입력해주세요</h3>
           <PasswordInput />
-          <button onClick={onClose} className="edit-btn">
+          <button onClick={handleCloseModal} className="edit-btn">
             비밀번호를 잊어버렸어요! 😭
           </button>
         </ModalBody>
