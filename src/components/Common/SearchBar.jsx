@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import SearchIcon from '../assets/img/icon-search.svg';
+import SearchIcon from '@/assets/img/icon-search.svg';
 
 const SearchBarField = css`
   display: flex;

@@ -11,9 +11,8 @@ import {
 } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Folder from '../components/Folder';
-import PasswordInput from '../components/PasswordInput';
-import { useModal } from '../hooks/UseModal';
+import PasswordInput from '@/components/Password/PasswordInput';
+import { useModal } from '@/hooks/UseModal';
 
 const ModalWrapper = css`
   max-width: 37.5rem;

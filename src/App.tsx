@@ -1,10 +1,10 @@
 import React from 'react';
-import Router from './router';
+import AppRouter from './router';
 import { ModalProvider } from './contexts/ModalContext';
 
 const App: React.FC = () => (
   <ModalProvider>
-    <Router />
+    <AppRouter />
   </ModalProvider>
 );
 

@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import { Switch } from '@chakra-ui/react';
-import GNB from '../components/GNB';
-import GoogleIcon from '../assets/img/icon-google.svg';
-import PasswordInputModal from '../components/PasswordInputModal';
-import { useModal } from '../hooks/UseModal';
+import GNB from '@/components/Common/GNB';
+import GoogleIcon from '@/assets/img/icon-google.svg';
+import PasswordInputModal from '@/components/Password/PasswordInputModal';
+import { useModal } from '@/hooks/UseModal';
 
 const pageWrapper = css`
   background: #f9f7f2;
