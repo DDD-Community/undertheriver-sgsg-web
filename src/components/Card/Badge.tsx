@@ -34,7 +34,7 @@ const badgeWrapper = css`
   }
 `;
 
-function Badge({ color }) {
+function Badge(color: string) {
   return <div css={badgeWrapper} className={color} />;
 }
 

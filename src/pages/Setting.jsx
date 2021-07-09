@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import { Switch } from '@chakra-ui/react';
-import GNB from '@/components/Common/GNB';
+import GNB from '@/components/common/GNB';
 import GoogleIcon from '@/assets/img/icon-google.svg';
-import PasswordInputModal from '@/components/Password/PasswordInputModal';
+import PasswordInputModal from '@/components/password/PasswordInputModal';
 import { useModal } from '@/hooks/UseModal';
 
 const pageWrapper = css`

@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import GNB from '@/components/Common/GNB';
-import Card from '@/components/Card/Card';
-import Popup from '@/components/Popup/Popup';
+import GNB from '@/components/common/GNB';
+import Card from '@/components/card/Card';
+import Popup from '@/components/popup/Popup';
 import NewMemoBtn from '@/assets/img/newMemo.svg';
-import FolderList from '@/components/Folder/FolderList';
-import SearchBar from '@/components/Common/SearchBar';
+import FolderList from '@/components/folder/FolderList';
+import SearchBar from '@/components/common/SearchBar';
 import Api, { checkFolder, userInfo } from '@/api/api';
-import ErrorPopup from '@/components/Common/ErrorPopup';
+import ErrorPopup from '@/components/common/ErrorPopup';
 
 const pageWrapper = css`
   background: #f9f7f2;

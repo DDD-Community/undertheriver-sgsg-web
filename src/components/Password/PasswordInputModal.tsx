@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import PasswordInput from '@/components/Password/PasswordInput';
+import PasswordInput from '@/components/password/PasswordInput';
 import { useModal } from '@/hooks/UseModal';
 
 const ModalWrapper = css`
