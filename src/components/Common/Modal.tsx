@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Folder from '../components/Folder';
-import { useModal } from '../hooks/UseModal';
+import Folder from '../Folder/Folder';
+import { useModal } from '../../hooks/UseModal';
 
 const ModalWrapper = css`
   max-width: 45rem;
@@ -47,14 +47,7 @@ const ModalWrapper = css`
 `;
 
 export default function CardModal() {
-  const {
-    isOpen,
-    handleCloseModal,
-    memoContent,
-    memoFolderTitle,
-    memoDate,
-    memoFolderColor,
-  } = useModal();
+  const { isOpen, handleCloseModal } = useModal();
 
   return (
     <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
@@ -62,13 +55,13 @@ export default function CardModal() {
       <ModalContent css={ModalWrapper}>
         <ModalHeader className="header">
           {/*<Folder color={memoFolderColor} />*/}
-          <span className="title">{memoFolderTitle}</span>
+          {/*<span className="title">{memoFolderTitle}</span>*/}
         </ModalHeader>
         <ModalCloseButton mt={6} mr={6} />
         <ModalBody className="body">
-          <p>{memoDate}</p>
+          {/*<p>{memoDate}</p>*/}
           <hr className="divider" />
-          <p>{memoContent}</p>
+          {/*<p>{memoContent}</p>*/}
         </ModalBody>
         <ModalFooter className="footer">
           <button onClick={handleCloseModal} className="edit-btn">

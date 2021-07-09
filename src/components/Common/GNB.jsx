@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import MainLogo from '../assets/img/mainLogo.svg';
-import ProfilePhoto from '../assets/img/profilePhoto.png';
+import MainLogo from '@/assets/img/mainLogo.svg';
+import ProfilePhoto from '@/assets/img/profilePhoto.png';
 
 const gnbWrapper = css`
   height: 80px;

@@ -7,10 +7,10 @@ interface ModalContextProps {
   isOpen: boolean;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
-  memoFolderColor: string;
-  memoFolderTitle: React.ReactNode;
-  memoDate: React.ReactNode;
-  memoContent: React.ReactNode;
+  // memoFolderColor: string;
+  // memoFolderTitle: React.ReactNode;
+  // memoDate: React.ReactNode;
+  // memoContent: React.ReactNode;
 }
 
 interface ModalProviderProps {
@@ -28,18 +28,9 @@ export function ModalProvider({ children }: ModalProviderProps) {
     onClose();
   }
 
-  const memoFolderTitle = 'test';
-  const memoDate = '000';
-  const memoFolderColor = 'blue';
-  const memoContent = 'test';
-
   return (
     <ModalContext.Provider
       value={{
-        memoFolderColor,
-        memoDate,
-        memoFolderTitle,
-        memoContent,
         isOpen,
         handleOpenModal,
         handleCloseModal,

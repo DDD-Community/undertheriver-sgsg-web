@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Textarea, Button } from '@chakra-ui/react';
-import TagInput from './TagInput';
-import Api from '../api/api';
+import TagInput from '../Card/TagInput';
+import Api from '../../api/api';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import CloseBtn from '../assets/img/closeBtn.svg';
-import penSound from '../assets/sounds/penSound.mp3';
-import ErrorPopup from './ErrorPopup';
-import * as Utils from '../lib/utils';
+import CloseBtn from '../../assets/img/closeBtn.svg';
+import penSound from '../../assets/sounds/penSound.mp3';
+import ErrorPopup from '../Common/ErrorPopup';
+import * as Utils from '../../lib/utils';
 
 const textareaWrapper = css`
   padding: 3rem 1rem 0 1rem;
