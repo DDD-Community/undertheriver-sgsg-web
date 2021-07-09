@@ -3,7 +3,7 @@ import { Input, Badge } from '@chakra-ui/react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import CloseTag from '../../assets/img/closeTag.svg';
+import CloseTag from '@/assets/img/closeTag.svg';
 
 const inputBox = css`
   width: 16.875rem;
