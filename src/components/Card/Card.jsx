@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Tag from '@/components/Card/Tag';
-import Modal from '@/components/Common/Modal';
-import CardMenu from '@/components/Card/CardMenu';
-import Badge from '@/components/Card/Badge';
+import Tag from '@/components/card/Tag';
+import Modal from '@/components/common/Modal';
+import CardMenu from '@/components/card/CardMenu';
+import Badge from '@/components/card/Badge';
 import MoreBtn from '@/assets/img/more.svg';
 import { useModal } from '@/hooks/UseModal';
 import useMenu from '@/hooks/UseMenu';

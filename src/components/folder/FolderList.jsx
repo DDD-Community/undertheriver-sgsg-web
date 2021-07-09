@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Folder from '@/components/Folder/Folder';
+import Folder from '@/components/folder/Folder';
 import ArrowDown from '@/assets/img/arrow-down.svg';
 import ArrowUp from '@/assets/img/arrow-up.svg';
 import LockIcon from '@/assets/img/icon-lock.svg';
-import FolderSortMenu from '@/components/Folder/FolderSortMenu';
+import FolderSortMenu from '@/components/folder/FolderSortMenu';
 
 const folderListWrapper = css`
   .menu-wrapper {

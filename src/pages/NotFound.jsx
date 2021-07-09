@@ -1,7 +1,7 @@
 import React from 'react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import GNB from '@/components/Common/GNB';
+import GNB from '@/components/common/GNB';
 import NotFoundImage from '@/assets/img/notFound.svg';
 
 const pageWrapper = css`

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Folder from '../Folder/Folder';
+import Folder from '../folder/Folder';
 import { useModal } from '../../hooks/UseModal';
 
 const ModalWrapper = css`

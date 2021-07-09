@@ -44,7 +44,7 @@ const tagWrapper = css`
   }
 `;
 
-function Tag(props) {
+function Tag(props: { color: string; text: string }) {
   return (
     <div css={tagWrapper} className={props.color}>
       {props.text}
