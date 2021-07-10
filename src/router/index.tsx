@@ -2,7 +2,7 @@
 // @ts-nocheck
 import React from 'react';
 import { createBrowserHistory } from 'history';
-import { Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Login from '@/pages/Login';
 import AfterLogin from '@/pages/AfterLogin';
 import PrivateRoute from '@/router/PrivateRoute';
@@ -14,7 +14,7 @@ const history = createBrowserHistory();
 
 const AppRouter = () => {
   return (
-    <Router history={history}>
+    <BrowserRouter history={history}>
       <Switch>
         <Route exact path="/login" component={Login} />
         <Route exact path="/after-login" component={AfterLogin} />
@@ -23,7 +23,7 @@ const AppRouter = () => {
         <Route path="/error" component={NotFound} />
         <Redirect path="*" to="/" /> *
       </Switch>
-    </Router>
+    </BrowserRouter>
   );
 };
 
