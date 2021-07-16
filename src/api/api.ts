@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createHashHistory } from 'history';
+import apiAxios from 'axios';
 
 const history = createHashHistory();
 
@@ -58,18 +59,9 @@ export function authLogout() {
 }
 
 //## 폴더 조회
-export function checkFolder(orderBy: string) {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .get('/folders' + '?' + 'orderBy=' + orderBy, getAccessTokenHeader())
-      .then((response: any) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err: any) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const checkFolder = async (orderBy: string) => {
+  return await apiAxios.get(`/folders?orderBy${orderBy}`, getAccessTokenHeader());
+};
 
 //## 폴더 생성
 export function createFolder(data: any) {
