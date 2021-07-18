@@ -3,14 +3,19 @@ import './styles/index.css';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { ChakraProvider } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider resetCSS>
-      <App />
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider resetCSS>
+        <App />
+      </ChakraProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
