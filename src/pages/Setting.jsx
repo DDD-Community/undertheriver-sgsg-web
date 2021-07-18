@@ -154,6 +154,7 @@ const Setting = () => {
               <span>더 빠르게 사각사각 해볼까요?</span>
             </div>
             <Switch
+              id="ex-toggle"
               size="lg"
               colorScheme="gray"
               isChecked={isExtensionUse}
