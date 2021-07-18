@@ -4,18 +4,6 @@ import apiAxios from 'axios';
 
 const history = createHashHistory();
 
-const apiPrefix = process.env.REACT_APP_API_URL;
-
-function baseApi(apiUrl?: string) {
-  return axios.create({
-    baseURL: apiUrl,
-    timeout: 5000,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-}
-
 function getAccessTokenHeader() {
   const auth = 'Bearer' + ` ` + localStorage.getItem('access_token');
   return { headers: { Authorization: auth } };
@@ -45,133 +33,62 @@ function moveLogin() {
 }
 
 //## 로그아웃
-export function authLogout() {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .delete('/auth/logout', getAccessTokenHeader())
-      .then((response) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const authLogout = async () => {
+  try {
+    await apiAxios.delete('/auth/logout', getAccessTokenHeader());
+  } catch (e) {
+    moveLogin();
+  }
+};
 
 //## 폴더 조회
+//TODO: 조회는 list로 통일하는 게 좋을듯!
 export const checkFolder = async (orderBy: string) => {
-  return await apiAxios.get(`/folders?orderBy${orderBy}`, getAccessTokenHeader());
+  return await apiAxios.get(`/folders?orderBy=${orderBy}`, getAccessTokenHeader());
 };
 
 //## 폴더 생성
-export function createFolder(data: any) {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .post('/folders', data, getAccessTokenHeader())
-      .then((response: any) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err: any) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const createFolder = async (data: any) => {
+  return await apiAxios.post('/folders', data, getAccessTokenHeader());
+};
 
 //## 폴더 삭제
-export function deleteFolder(folderId: number) {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .delete('/folders' + `/${folderId}`, getAccessTokenHeader())
-      .then((response) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const deleteFolder = async (folderId: number) => {
+  return await apiAxios.delete(`/folders/${folderId}`, getAccessTokenHeader());
+};
 
 //## 폴더 이름 수정
-export function updateFolder(folderId: number, title: string) {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .put('/folders' + `/${folderId}` + `/${title}`, getAccessTokenHeader())
-      .then((response) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const updateFolder = async (folderId: number, title: string) => {
+  return await apiAxios.put(`/folders/${folderId}/${title}`, getAccessTokenHeader());
+};
 
 //## 다음 폴더 색상 조회
-export function checkFolderColor() {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .get('/folders/color', getAccessTokenHeader())
-      .then((response: any) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err: any) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const checkFolderColor = async () => {
+  return await apiAxios.get('/folders/color', getAccessTokenHeader());
+};
 
-export function listMemo(data: any) {
+export const listMemo = async (data: any) => {
   if (data.folderId) {
-    return new Promise((resolve, reject) => {
-      return baseApi(apiPrefix)
-        .get('/memos' + '?' + 'folderId=' + data.folderId, getAccessTokenHeader())
-        .then((response: any) => {
-          successStatusCheck(response, resolve);
-        })
-        .catch((err: any) => {
-          failStatusCheck(err, reject);
-        });
-    });
+    return await apiAxios.get(`/memos?folderId=${data.folderId}`, getAccessTokenHeader());
   } else {
-    return new Promise((resolve, reject) => {
-      return baseApi(apiPrefix)
-        .get('/memos', getAccessTokenHeader())
-        .then((response: any) => {
-          successStatusCheck(response, resolve);
-        })
-        .catch((err: any) => {
-          failStatusCheck(err, reject);
-        });
-    });
+    return await apiAxios.get(`/memos`, getAccessTokenHeader());
   }
-}
+};
 
 //## 메모 생성
-export function createMemo(data: any) {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .post('/memos', data, getAccessTokenHeader())
-      .then((response: any) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err: any) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+export const createMemo = async (data: any) => {
+  return await apiAxios.post('/memos', data, getAccessTokenHeader());
+};
 
 //## 회원 조회
-export function userInfo() {
-  return new Promise((resolve, reject) => {
-    return baseApi(apiPrefix)
-      .get('/users/me', getAccessTokenHeader())
-      .then((response: any) => {
-        successStatusCheck(response, resolve);
-      })
-      .catch((err: any) => {
-        failStatusCheck(err, reject);
-      });
-  });
-}
+//TODO: 함수 작성할 때, 동사를 먼저 쓰기! getUserInfo 이런 식으로.
+export const userInfo = async () => {
+  try {
+    return await apiAxios.get('/users/me', getAccessTokenHeader());
+  } catch (e) {
+    moveLogin();
+  }
+};
 
 export default {
   authLogout,
