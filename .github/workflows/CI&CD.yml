@@ -2,7 +2,7 @@ name: CI/CD
 on:
   push:
     branches:
-      - 'develop'
+      - 'main'
 
 env:
   REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
