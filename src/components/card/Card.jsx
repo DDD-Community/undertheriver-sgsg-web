@@ -85,7 +85,6 @@ function Card(props) {
 
   return (
     <>
-      <Modal />
       <Box css={cardWrapper}>
         <div className="content">
           <div css={innerCardWrapper}>
@@ -103,6 +102,7 @@ function Card(props) {
                 </div>
               )}
               <div css={bodySection} onClick={handleOpenModal}>
+                <Modal />
                 {props.memo.memoContent}
               </div>
               <div css={tagSection}>

@@ -27,9 +27,15 @@ const menuWrapper = css`
 `;
 
 const CardMenu = ({ menu }) => {
+  const clickMenu = (e) => {
+    e.stopPropagation();
+  };
   const menuList = menu.map((d) => (
     <p key={d.label} className="menu-list">
-      {d.label}
+      <button onClick={clickMenu} value={d.label}>
+        {' '}
+        {d.label}
+      </button>
     </p>
   ));
   return <Box css={menuWrapper}>{menuList}</Box>;
