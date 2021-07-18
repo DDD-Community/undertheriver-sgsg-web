@@ -2,6 +2,9 @@ import axios from 'axios';
 import { createHashHistory } from 'history';
 import apiAxios from 'axios';
 
+//TODO: 임시 추가
+apiAxios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 const history = createHashHistory();
 
 function getAccessTokenHeader() {
