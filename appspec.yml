@@ -5,6 +5,6 @@ files:
   - source: /
     destination: /home/ubuntu/frontend
 hooks:
-  BeforeInstall:
-    - location: scripts/clean.sh
+  AfterInstall:
+    - location: scripts/restart.sh
       runas: root
