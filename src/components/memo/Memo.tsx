@@ -2,15 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Tag from '@/components/card/Tag';
+import Tag from '@/components/memo/Tag';
 import Modal from '@/components/common/Modal';
-import CardMenu from '@/components/card/CardMenu';
-import Badge from '@/components/card/Badge';
+import MemoMenu from '@/components/memo/MemoMenu';
+import Badge from '@/components/memo/Badge';
 import MoreBtn from '@/assets/img/more.svg';
 import { useModal } from '@/hooks/UseModal';
 import useMenu from '@/hooks/UseMenu';
+import { MemoModel } from '@/types';
 
-const cardWrapper = css`
+const memoWrapper = css`
   padding-top: 100%;
   box-sizing: border-box;
   position: relative;
@@ -28,7 +29,7 @@ const cardWrapper = css`
   }
 `;
 
-const innerCardWrapper = css`
+const innerMemoWrapper = css`
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(165, 170, 178, 0.3);
@@ -77,36 +78,35 @@ const menu = [
   { label: '삭제하기' },
 ];
 
-function Card(props) {
-  const { handleOpenModal } = useModal();
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+function Memo({ createdAt, folderTitle, folderColor, memoContent, folderId }: MemoModel) {
   const { onOpenMenu, isMenuOpen, onCloseMenu } = useMenu();
+  const { handleOpenModal } = useModal();
   const wrapperRef = useRef(null);
   onCloseMenu(wrapperRef);
 
   return (
     <>
-      <Box css={cardWrapper}>
+      <Box css={memoWrapper} onClick={handleOpenModal}>
         <div className="content">
-          <div css={innerCardWrapper}>
+          <div css={innerMemoWrapper}>
             <div className="content">
               <div css={headerSection}>
-                <span className="date">{props.memo.createdAt}</span>
-                {props.memo.favorite && <Badge color={props.memo.folderColor} className="badge" />}
+                <span className="date">{createdAt}</span>
+                {createdAt && <Badge color={folderColor} className="badge" />}
                 <span className="menu-btn" onClick={onOpenMenu}>
                   <img src={MoreBtn} />
                 </span>
               </div>
               {isMenuOpen && (
                 <div ref={wrapperRef}>
-                  <CardMenu menu={menu} />
+                  <MemoMenu menu={menu} />
                 </div>
               )}
-              <div css={bodySection} onClick={handleOpenModal}>
-                <Modal />
-                {props.memo.memoContent}
-              </div>
+              <div css={bodySection}>{memoContent}</div>
               <div css={tagSection}>
-                <Tag color={props.memo.folderColor} text={props.memo.folderTitle} />
+                <Tag color={folderColor} text={folderTitle} />
               </div>
             </div>
           </div>
@@ -116,4 +116,4 @@ function Card(props) {
   );
 }
 
-export default Card;
+export default Memo;

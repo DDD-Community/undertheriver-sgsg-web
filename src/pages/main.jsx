@@ -3,13 +3,16 @@ import React, { useState, useEffect, useRef } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import GNB from '@/components/common/GNB';
-import Card from '@/components/card/Card';
+import Memo from '@/components/memo/Memo';
 import Popup from '@/components/popup/Popup';
 import NewMemoBtn from '@/assets/img/newMemo.svg';
 import FolderList from '@/components/folder/FolderList';
 import SearchBar from '@/components/common/SearchBar';
 import Api, { checkFolder, userInfo } from '@/api/api';
 import ErrorPopup from '@/components/common/ErrorPopup';
+import { useModal } from '@/hooks/UseModal';
+import Modal from '@/components/common/Modal';
+import MemoList from '@/components/memo/MemoList';
 
 const pageWrapper = css`
   background: #f9f7f2;
@@ -96,6 +99,7 @@ const Main = () => {
     localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATED_AT',
   );
   const [updateFlag, setUpdateFlag] = useState(false);
+  const { handleOpenModal } = useModal();
   const [cards, setCards] = useState([
     {
       createdAt: '',
@@ -114,17 +118,7 @@ const Main = () => {
 
   useEffect(() => {
     userInfoApi();
-    // listMemoApi();
   }, []);
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    listMemoApi(selectedFolder.id);
-  }, [selectedFolder]);
 
   useEffect(() => {
     checkFolderApi();
@@ -133,7 +127,6 @@ const Main = () => {
   useEffect(() => {
     if (updateFlag) {
       checkFolderApi();
-      listMemoApi();
       setUpdateFlag(false);
     }
   }, [updateFlag]);
@@ -145,26 +138,6 @@ const Main = () => {
         left: buttonRef.current.offsetLeft - 344,
         top: buttonRef.current.offsetTop + 72,
       });
-    }
-  };
-
-  const renderCardList = () => {
-    let html = [];
-
-    try {
-      if (cards.length === 0) {
-        return html;
-      }
-      cards.map((d, idx) => {
-        html.push(
-          <li key={idx}>
-            <Card memo={d} />
-          </li>,
-        );
-      });
-      return html;
-    } catch (e) {
-      return html;
     }
   };
 
@@ -185,37 +158,6 @@ const Main = () => {
                 profileImageUrl: data.response.profileImageUrl,
               });
               localStorage.setItem('user', JSON.stringify(data.response));
-            } else {
-              setErrorPopup({ active: 'active', content: defaultMsg });
-            }
-          } else {
-            setErrorPopup({ active: 'active', content: defaultMsg });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setErrorPopup({ active: 'active', content: defaultMsg });
-        });
-    } catch (e) {
-      setLoading(false);
-      setErrorPopup({ active: 'active', content: defaultMsg });
-    }
-  };
-
-  const listMemoApi = (folderId) => {
-    try {
-      const obj = {
-        folderId: folderId ? folderId : null,
-      };
-      setLoading(true);
-      Api.listMemo(obj)
-        .then((response) => {
-          setLoading(false);
-          if (response.status === 200) {
-            const data = response.data;
-            if (data.success) {
-              setCards(data.response);
             } else {
               setErrorPopup({ active: 'active', content: defaultMsg });
             }
@@ -300,7 +242,9 @@ const Main = () => {
               </button>
             </div>
             <article css={cardListWrapper}>
-              <ul className="card-list">{renderCardList()}</ul>
+              <ul className="card-list">
+                <MemoList />
+              </ul>
             </article>
           </div>
         </section>

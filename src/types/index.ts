@@ -1,7 +1,20 @@
-export interface CardMenu {
+export interface MemoMenu {
   label: string;
 }
 
+export interface MemoModel {
+  createdAt: string;
+  favorite?: boolean;
+  folderColor: string;
+  folderId: number;
+  folderTitle: string;
+  memoContent: string;
+  memoId?: number;
+  secret?: boolean;
+  thumbnailFaviconUrl?: string;
+  thumbnailTitle?: string;
+  thumbnailUrl?: string;
+}
 interface _Error {
   message: string;
   status: number;
