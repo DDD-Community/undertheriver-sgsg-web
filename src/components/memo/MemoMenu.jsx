@@ -26,7 +26,7 @@ const menuWrapper = css`
   }
 `;
 
-const CardMenu = ({ menu }) => {
+const MemoMenu = ({ menu }) => {
   const clickMenu = (e) => {
     e.stopPropagation();
   };
@@ -41,4 +41,4 @@ const CardMenu = ({ menu }) => {
   return <Box css={menuWrapper}>{menuList}</Box>;
 };
 
-export default CardMenu;
+export default MemoMenu;

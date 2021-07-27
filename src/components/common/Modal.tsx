@@ -46,7 +46,7 @@ const ModalWrapper = css`
   }
 `;
 
-export default function CardModal() {
+export default function MemoModal() {
   const { isOpen, handleCloseModal } = useModal();
 
   return (
