@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Textarea, Button } from '@chakra-ui/react';
-import TagInput from '@/components/card/TagInput';
+import TagInput from '@/components/memo/TagInput';
 import Api from '@/api/api';
 
 /** @jsxImportSource @emotion/react */

@@ -34,8 +34,12 @@ const badgeWrapper = css`
   }
 `;
 
-function Badge(color: string) {
-  return <div css={badgeWrapper} className={color} />;
+interface Badge {
+  color: string;
+  className?: string;
+}
+function Badge(props: Badge) {
+  return <div css={badgeWrapper} className={props.color} />;
 }
 
 export default Badge;
