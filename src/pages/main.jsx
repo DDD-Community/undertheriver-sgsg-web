@@ -13,6 +13,8 @@ import ErrorPopup from '@/components/common/ErrorPopup';
 import { useModal } from '@/hooks/UseModal';
 import Modal from '@/components/common/Modal';
 import MemoList from '@/components/memo/MemoList';
+import { MemoListProvider } from '@/contexts/MemoListContext';
+import { SWRConfig } from 'swr';
 
 const pageWrapper = css`
   background: #f9f7f2;
@@ -211,57 +213,59 @@ const Main = () => {
 
   return (
     <>
-      <GNB />
-      <main css={pageWrapper}>
-        {isSearchBar === 'true' && <SearchBar />}
-        <section
-          className="content-wrapper"
-          css={{ paddingTop: isSearchBar === 'true' ? '1rem' : '5rem' }}
-        >
-          <aside className="aside-wrapper">
-            <FolderList
-              folderList={folderList}
-              setSortType={setSortType}
-              allMemoLength={allMemoLength}
-              selectedFolder={selectedFolder}
-              setSelectedFolder={setSelectedFolder}
-            />
-          </aside>
-          <div className="right-section">
-            <div className="header">
-              <h2 className="folder-name">
-                {selectedFolder.title}
-                <span className="folder-count">
-                  {selectedFolder.length !== 0 ? selectedFolder.length : allMemoLength}
-                </span>
-              </h2>
-              <button onClick={() => memoWrite()} ref={buttonRef}>
-                <figure>
-                  <img src={NewMemoBtn} alt="Button too add new notes" />
-                </figure>
-              </button>
+      <MemoListProvider>
+        <GNB />
+        <main css={pageWrapper}>
+          {isSearchBar === 'true' && <SearchBar />}
+          <section
+            className="content-wrapper"
+            css={{ paddingTop: isSearchBar === 'true' ? '1rem' : '5rem' }}
+          >
+            <aside className="aside-wrapper">
+              <FolderList
+                folderList={folderList}
+                setSortType={setSortType}
+                allMemoLength={allMemoLength}
+                selectedFolder={selectedFolder}
+                setSelectedFolder={setSelectedFolder}
+              />
+            </aside>
+            <div className="right-section">
+              <div className="header">
+                <h2 className="folder-name">
+                  {selectedFolder.title}
+                  <span className="folder-count">
+                    {selectedFolder.length !== 0 ? selectedFolder.length : allMemoLength}
+                  </span>
+                </h2>
+                <button onClick={() => memoWrite()} ref={buttonRef}>
+                  <figure>
+                    <img src={NewMemoBtn} alt="Button too add new notes" />
+                  </figure>
+                </button>
+              </div>
+              <article css={cardListWrapper}>
+                <ul className="card-list">
+                  <MemoList />
+                </ul>
+              </article>
             </div>
-            <article css={cardListWrapper}>
-              <ul className="card-list">
-                <MemoList />
-              </ul>
-            </article>
-          </div>
-        </section>
-      </main>
-      {writePopup.flag && (
-        <Popup
-          writePopup={writePopup}
-          setWritePopup={setWritePopup}
-          folderList={folderList}
-          setUpdateFlag={setUpdateFlag}
+          </section>
+        </main>
+        {writePopup.flag && (
+          <Popup
+            writePopup={writePopup}
+            setWritePopup={setWritePopup}
+            folderList={folderList}
+            setUpdateFlag={setUpdateFlag}
+          />
+        )}
+        <ErrorPopup
+          active={errorPopup.active}
+          content={errorPopup.content}
+          setErrorPopup={setErrorPopup}
         />
-      )}
-      <ErrorPopup
-        active={errorPopup.active}
-        content={errorPopup.content}
-        setErrorPopup={setErrorPopup}
-      />
+      </MemoListProvider>
     </>
   );
 };
