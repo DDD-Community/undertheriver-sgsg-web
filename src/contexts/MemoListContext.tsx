@@ -29,7 +29,7 @@ export const MemoListProvider: FunctionComponent<MemoListProviderProps> = ({
   useEffect(() => {
     if (!memoList) return;
   }, [memoList]);
-  console.log(memoList);
+  // console.log(memoList);
 
   return (
     <>

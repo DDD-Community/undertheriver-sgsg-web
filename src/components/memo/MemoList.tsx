@@ -7,10 +7,10 @@ function MemoList() {
   const { memoList } = useMemoListContext();
 
   return (
-    <div>
+    <>
       {memoList?.map((d) => (
         <Memo
-          key={d.folderId}
+          key={d.memoId}
           folderId={d.folderId}
           folderColor={d.folderColor}
           createdAt={d.createdAt}
@@ -19,7 +19,7 @@ function MemoList() {
         />
       ))}
       <Modal />
-    </div>
+    </>
   );
 }
 
