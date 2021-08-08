@@ -45,8 +45,7 @@ export const authLogout = async () => {
 };
 
 //## 폴더 조회
-//TODO: 조회는 list로 통일하는 게 좋을듯!
-export const checkFolder = async (orderBy: string) => {
+export const listFolder = async (orderBy: string) => {
   return await apiAxios.get(`/folders?orderBy=${orderBy}`, getAccessTokenHeader());
 };
 
@@ -95,7 +94,7 @@ export const userInfo = async () => {
 
 export default {
   authLogout,
-  checkFolder,
+  listFolder,
   createFolder,
   deleteFolder,
   updateFolder,

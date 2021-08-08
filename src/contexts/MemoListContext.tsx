@@ -13,6 +13,7 @@ interface MemoListProviderProps {
   children: ReactNode;
   folderId?: number | undefined;
 }
+
 const baseURL = process.env.REACT_APP_API_URL;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -20,7 +21,10 @@ export const MemoListProvider: FunctionComponent<MemoListProviderProps> = ({
   children,
   folderId,
 }) => {
-  const { data: memoList, error } = useSWR(`${baseURL}/memos?folderId=3`, fetcher);
+  const { data: memoList, error } = useSWR(
+    `${baseURL}/memos${folderId ? '?folderId=' + folderId : ''}`,
+    fetcher,
+  );
   if (error) return console.error(error);
   useEffect(() => {
     if (!memoList) return;
