@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -8,12 +11,13 @@ import Popup from '@/components/popup/Popup';
 import NewMemoBtn from '@/assets/img/newMemo.svg';
 import FolderList from '@/components/folder/FolderList';
 import SearchBar from '@/components/common/SearchBar';
-import Api, { checkFolder, userInfo } from '@/api/api';
+import Api from '@/api/api';
 import ErrorPopup from '@/components/common/ErrorPopup';
 import { useModal } from '@/hooks/UseModal';
 import Modal from '@/components/common/Modal';
 import MemoList from '@/components/memo/MemoList';
 import { MemoListProvider } from '@/contexts/MemoListContext';
+import { FolderListProvider } from '@/contexts/FolderListContext';
 import { SWRConfig } from 'swr';
 
 const pageWrapper = css`
@@ -78,6 +82,11 @@ const cardListWrapper = css`
 const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주세요.';
 
 const Main = () => {
+  const location = history.location;
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const queryString = require('query-string');
+  const parsed = queryString.parse(location.search);
+
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
@@ -96,7 +105,7 @@ const Main = () => {
   });
   const [folderList, setFolderList] = useState([]);
   const [allMemoLength, setAllMemoLength] = useState(0);
-  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: null, length: 0 });
+  const [selectedFolder, setSelectedFolder] = useState({ title: '전체', id: 0, length: 0 });
   const [sortType, setSortType] = useState(
     localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATED_AT',
   );
@@ -123,12 +132,12 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
-    checkFolderApi();
+    // listFolderApi();
   }, [sortType]);
 
   useEffect(() => {
     if (updateFlag) {
-      checkFolderApi();
+      // listFolderApi();
       setUpdateFlag(false);
     }
   }, [updateFlag]);
@@ -178,94 +187,63 @@ const Main = () => {
     }
   };
 
-  const checkFolderApi = () => {
-    try {
-      setLoading(true);
-      Api.checkFolder(sortType)
-        .then((response) => {
-          setLoading(false);
-          if (response.status === 200) {
-            const data = response.data;
-            if (data.success) {
-              let memoLength = 0;
-              for (let i = 0; i < data.response.length; i++) {
-                memoLength += data.response[i].memoCount;
-              }
-              setAllMemoLength(memoLength);
-              setFolderList(data.response);
-            } else {
-              setErrorPopup({ active: 'active', content: defaultMsg });
-            }
-          } else {
-            setErrorPopup({ active: 'active', content: defaultMsg });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setErrorPopup({ active: 'active', content: defaultMsg });
-        });
-    } catch (e) {
-      setLoading(false);
-      setErrorPopup({ active: 'active', content: defaultMsg });
-    }
-  };
-
   return (
     <>
-      <MemoListProvider>
-        <GNB />
-        <main css={pageWrapper}>
-          {isSearchBar === 'true' && <SearchBar />}
-          <section
-            className="content-wrapper"
-            css={{ paddingTop: isSearchBar === 'true' ? '1rem' : '5rem' }}
-          >
-            <aside className="aside-wrapper">
-              <FolderList
-                folderList={folderList}
-                setSortType={setSortType}
-                allMemoLength={allMemoLength}
-                selectedFolder={selectedFolder}
-                setSelectedFolder={setSelectedFolder}
-              />
-            </aside>
-            <div className="right-section">
-              <div className="header">
-                <h2 className="folder-name">
-                  {selectedFolder.title}
-                  <span className="folder-count">
-                    {selectedFolder.length !== 0 ? selectedFolder.length : allMemoLength}
-                  </span>
-                </h2>
-                <button onClick={() => memoWrite()} ref={buttonRef}>
-                  <figure>
-                    <img src={NewMemoBtn} alt="Button too add new notes" />
-                  </figure>
-                </button>
+      <FolderListProvider orderBy={'MEMO'}>
+        <MemoListProvider folderId={parsed.folderId}>
+          <GNB />
+          <main css={pageWrapper}>
+            {isSearchBar === 'true' && <SearchBar />}
+            <section
+              className="content-wrapper"
+              css={{ paddingTop: isSearchBar === 'true' ? '1rem' : '5rem' }}
+            >
+              <aside className="aside-wrapper">
+                <FolderList
+                  folderList={folderList}
+                  setSortType={setSortType}
+                  allMemoLength={allMemoLength}
+                  selectedFolder={selectedFolder}
+                  setSelectedFolder={setSelectedFolder}
+                />
+              </aside>
+              <div className="right-section">
+                <div className="header">
+                  <h2 className="folder-name">
+                    {selectedFolder.title}
+                    <span className="folder-count">
+                      {selectedFolder.length !== 0 ? selectedFolder.length : allMemoLength}
+                    </span>
+                  </h2>
+                  <button onClick={() => memoWrite()} ref={buttonRef}>
+                    <figure>
+                      <img src={NewMemoBtn} alt="Button too add new notes" />
+                    </figure>
+                  </button>
+                </div>
+                <article css={cardListWrapper}>
+                  <ul className="card-list">
+                    <MemoList />
+                  </ul>
+                </article>
               </div>
-              <article css={cardListWrapper}>
-                <ul className="card-list">
-                  <MemoList />
-                </ul>
-              </article>
-            </div>
-          </section>
-        </main>
-        {writePopup.flag && (
-          <Popup
-            writePopup={writePopup}
-            setWritePopup={setWritePopup}
-            folderList={folderList}
-            setUpdateFlag={setUpdateFlag}
+            </section>
+          </main>
+          {writePopup.flag && (
+            <Popup
+              writePopup={writePopup}
+              setWritePopup={setWritePopup}
+              folderList={folderList}
+              setUpdateFlag={setUpdateFlag}
+            />
+          )}
+          <ErrorPopup
+            active={errorPopup.active}
+            content={errorPopup.content}
+            setErrorPopup={setErrorPopup}
           />
-        )}
-        <ErrorPopup
-          active={errorPopup.active}
-          content={errorPopup.content}
-          setErrorPopup={setErrorPopup}
-        />
-      </MemoListProvider>
+        </MemoListProvider>
+      </FolderListProvider>
     </>
   );
 };

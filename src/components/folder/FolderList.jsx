@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
@@ -7,6 +10,7 @@ import ArrowDown from '@/assets/img/arrow-down.svg';
 import ArrowUp from '@/assets/img/arrow-up.svg';
 import LockIcon from '@/assets/img/icon-lock.svg';
 import FolderSortMenu from '@/components/folder/FolderSortMenu';
+import { useFolderListContext } from '@/contexts/FolderListContext';
 
 const folderListWrapper = css`
   .menu-wrapper {
@@ -108,11 +112,12 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
+  const { folderList } = useFolderListContext();
   const tempSortType = localStorage.getItem('sort_type');
   let tempSortLabel =
     tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
   const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
-  const [folderList, setFolderList] = useState([]);
+  // const [folderList, setFolderList] = useState([]);
   const [orderType, setOrderType] = useState({
     flag: false,
     type: 'ASC',
@@ -143,19 +148,25 @@ function FolderList(props) {
 
   useEffect(() => {
     if (props.folderList) {
-      setFolderList(props.folderList);
+      // setFolderList(props.folderList);
     }
   }, [props.folderList]);
 
   useEffect(() => {
     if (orderType.flag) {
       let tempList = folderList.reverse();
-      setFolderList(tempList);
+      // setFolderList(tempList);
     }
     setOrderType({ ...orderType, flag: false });
   }, [orderType.flag]);
 
   const onClickFolder = (title, id = null, length) => {
+    // TODO 쿼리스트링 처리 수정 사항
+    history.push({
+      pathname: '/',
+      search: `?folderId=${id}`,
+    });
+
     props.setSelectedFolder({ title: title, id: id, length: length });
   };
 
@@ -163,7 +174,7 @@ function FolderList(props) {
     let html = [];
 
     try {
-      if (props.folderList.length === 0) {
+      if (folderList.length === 0) {
         return html;
       }
       html.push(

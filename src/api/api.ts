@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { createHashHistory } from 'history';
+import { createBrowserHistory } from 'history';
 import apiAxios from 'axios';
 
 //TODO: 임시 추가
 apiAxios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-const history = createHashHistory();
+const history = createBrowserHistory();
 
 function getAccessTokenHeader() {
   const auth = 'Bearer' + ` ` + localStorage.getItem('access_token');
@@ -45,8 +45,7 @@ export const authLogout = async () => {
 };
 
 //## 폴더 조회
-//TODO: 조회는 list로 통일하는 게 좋을듯!
-export const checkFolder = async (orderBy: string) => {
+export const listFolder = async (orderBy: string) => {
   return await apiAxios.get(`/folders?orderBy=${orderBy}`, getAccessTokenHeader());
 };
 
@@ -95,7 +94,7 @@ export const userInfo = async () => {
 
 export default {
   authLogout,
-  checkFolder,
+  listFolder,
   createFolder,
   deleteFolder,
   updateFolder,

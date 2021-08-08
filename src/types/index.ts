@@ -15,10 +15,19 @@ export interface MemoModel {
   thumbnailTitle?: string;
   thumbnailUrl?: string;
 }
+
+export interface FolderModel {
+  color: string;
+  id: number;
+  memoCount: number;
+  title: string;
+}
+
 interface _Error {
   message: string;
   status: number;
 }
+
 export interface Response<T> {
   error: _Error;
   response: Record<string, unknown>;
