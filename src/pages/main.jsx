@@ -190,7 +190,8 @@ const Main = () => {
   return (
     <>
       <FolderListProvider orderBy={'MEMO'}>
-        <MemoListProvider folderId={parsed.folderId}>
+        {/*<MemoListProvider folderId={parsed.folderId}>*/}
+        <MemoListProvider folderId={selectedFolder.id}>
           <GNB />
           <main css={pageWrapper}>
             {isSearchBar === 'true' && <SearchBar />}
