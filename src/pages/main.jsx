@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -79,6 +82,11 @@ const cardListWrapper = css`
 const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주세요.';
 
 const Main = () => {
+  const location = history.location;
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const queryString = require('query-string');
+  const parsed = queryString.parse(location.search);
+
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
@@ -124,12 +132,12 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
-    listFolderApi();
+    // listFolderApi();
   }, [sortType]);
 
   useEffect(() => {
     if (updateFlag) {
-      listFolderApi();
+      // listFolderApi();
       setUpdateFlag(false);
     }
   }, [updateFlag]);
@@ -179,43 +187,10 @@ const Main = () => {
     }
   };
 
-  const listFolderApi = () => {
-    try {
-      setLoading(true);
-      Api.listFolder(sortType)
-        .then((response) => {
-          setLoading(false);
-          if (response.status === 200) {
-            const data = response.data;
-            if (data.success) {
-              let memoLength = 0;
-              for (let i = 0; i < data.response.length; i++) {
-                memoLength += data.response[i].memoCount;
-              }
-              setAllMemoLength(memoLength);
-              setFolderList(data.response);
-            } else {
-              setErrorPopup({ active: 'active', content: defaultMsg });
-            }
-          } else {
-            setErrorPopup({ active: 'active', content: defaultMsg });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setErrorPopup({ active: 'active', content: defaultMsg });
-        });
-    } catch (e) {
-      setLoading(false);
-      setErrorPopup({ active: 'active', content: defaultMsg });
-    }
-  };
-
   return (
     <>
       <FolderListProvider orderBy={'MEMO'}>
-        <MemoListProvider folderId={selectedFolder.id}>
+        <MemoListProvider folderId={parsed.folderId}>
           <GNB />
           <main css={pageWrapper}>
             {isSearchBar === 'true' && <SearchBar />}
