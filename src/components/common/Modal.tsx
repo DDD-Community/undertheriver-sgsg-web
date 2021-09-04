@@ -13,6 +13,7 @@ import {
 import { css, jsx } from '@emotion/react';
 import Folder from '@/components/folder/Folder';
 import { useModal } from '@/hooks/UseModal';
+import { MemoModel } from '@/types';
 
 const ModalWrapper = css`
   max-width: 45rem;
@@ -47,21 +48,21 @@ const ModalWrapper = css`
 `;
 
 export default function MemoModal() {
-  const { isOpen, handleCloseModal } = useModal();
+  const { isOpen, handleCloseModal, currentModalData } = useModal();
 
   return (
     <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
       <ModalOverlay />
       <ModalContent css={ModalWrapper}>
         <ModalHeader className="header">
-          {/*<Folder color={memoFolderColor} />*/}
-          {/*<span className="title">{memoFolderTitle}</span>*/}
+          <Folder color={currentModalData.folderColor ? currentModalData.folderColor : 'red'} />
+          <span className="title">{currentModalData.folderTitle}</span>
         </ModalHeader>
         <ModalCloseButton mt={6} mr={6} />
         <ModalBody className="body">
-          {/*<p>{memoDate}</p>*/}
+          <p>{currentModalData.createdAt}</p>
           <hr className="divider" />
-          {/*<p>{memoContent}</p>*/}
+          <p>{currentModalData.memoContent}</p>
         </ModalBody>
         <ModalFooter className="footer">
           <button onClick={handleCloseModal} className="edit-btn">

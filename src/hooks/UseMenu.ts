@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const useMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  function onOpenMenu() {
+  function onOpenMenu(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     setIsMenuOpen(true);
+    e.preventDefault();
   }
 
   function onCloseMenu(ref: React.RefObject<HTMLDivElement>) {
