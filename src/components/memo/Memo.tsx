@@ -78,9 +78,7 @@ const menu = [
   { label: '삭제하기' },
 ];
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-function Memo({ createdAt, folderTitle, folderColor, memoContent, folderId }: MemoModel) {
+function Memo(memo: Partial<MemoModel>) {
   const { onOpenMenu, isMenuOpen, onCloseMenu } = useMenu();
   const { handleOpenModal } = useModal();
   const wrapperRef = useRef(null);
@@ -88,14 +86,19 @@ function Memo({ createdAt, folderTitle, folderColor, memoContent, folderId }: Me
 
   return (
     <>
-      <Box css={memoWrapper} onClick={handleOpenModal}>
+      <Box css={memoWrapper}>
         <div className="content">
           <div css={innerMemoWrapper}>
             <div className="content">
               <div css={headerSection}>
-                <span className="date">{createdAt}</span>
-                {createdAt && <Badge color={folderColor} className="badge" />}
-                <span className="menu-btn" onClick={onOpenMenu}>
+                <span className="date">{memo.createdAt}</span>
+                {memo.createdAt && (
+                  <Badge color={memo.folderColor ? memo.folderColor : 'red'} className="badge" />
+                )}
+                <span
+                  className="menu-btn"
+                  onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => onOpenMenu(e)}
+                >
                   <img src={MoreBtn} />
                 </span>
               </div>
@@ -104,9 +107,14 @@ function Memo({ createdAt, folderTitle, folderColor, memoContent, folderId }: Me
                   <MemoMenu menu={menu} />
                 </div>
               )}
-              <div css={bodySection}>{memoContent}</div>
-              <div css={tagSection}>
-                <Tag color={folderColor} text={folderTitle} />
+              <div css={bodySection} onClick={() => handleOpenModal(memo)}>
+                {memo.memoContent}
+              </div>
+              <div css={tagSection} onClick={() => handleOpenModal(memo)}>
+                <Tag
+                  color={memo.folderColor ? memo.folderColor : 'red'}
+                  text={memo.folderTitle ? memo.folderTitle : ''}
+                />
               </div>
             </div>
           </div>

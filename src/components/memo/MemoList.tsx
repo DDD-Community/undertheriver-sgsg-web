@@ -1,7 +1,7 @@
 import Memo from '@/components/memo/Memo';
-import Modal from '@/components/common/Modal';
 import React from 'react';
 import { useMemoListContext } from '@/contexts/MemoListContext';
+import MemoModal from '@/components/common/Modal';
 
 function MemoList() {
   const { memoList } = useMemoListContext();
@@ -18,7 +18,7 @@ function MemoList() {
           folderTitle={d.folderTitle}
         />
       ))}
-      <Modal />
+      <MemoModal />
     </>
   );
 }

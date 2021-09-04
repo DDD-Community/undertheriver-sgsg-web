@@ -1,16 +1,14 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
+import { MemoModel } from '@/types';
 
 export const ModalContext = createContext({} as ModalContextProps);
 
 interface ModalContextProps {
   isOpen: boolean;
-  handleOpenModal: () => void;
+  handleOpenModal: (args: Partial<MemoModel>) => void;
   handleCloseModal: () => void;
-  // memoFolderColor: string;
-  // memoFolderTitle: React.ReactNode;
-  // memoDate: React.ReactNode;
-  // memoContent: React.ReactNode;
+  currentModalData: Partial<MemoModel>;
 }
 
 interface ModalProviderProps {
@@ -19,10 +17,7 @@ interface ModalProviderProps {
 
 export function ModalProvider({ children }: ModalProviderProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  function handleOpenModal() {
-    onOpen();
-  }
+  const [currentModalData, setCurrentModalData] = useState({});
 
   function handleCloseModal() {
     onClose();
@@ -32,8 +27,12 @@ export function ModalProvider({ children }: ModalProviderProps) {
     <ModalContext.Provider
       value={{
         isOpen,
-        handleOpenModal,
+        handleOpenModal(args) {
+          onOpen();
+          setCurrentModalData(args);
+        },
         handleCloseModal,
+        currentModalData,
       }}
     >
       {children}
