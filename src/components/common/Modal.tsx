@@ -14,6 +14,7 @@ import { css, jsx } from '@emotion/react';
 import Folder from '@/components/folder/Folder';
 import { useModal } from '@/hooks/UseModal';
 import { MemoModel } from '@/types';
+import { deleteMemo, updateMemo } from '@/api/api';
 
 const ModalWrapper = css`
   max-width: 45rem;
@@ -50,6 +51,21 @@ const ModalWrapper = css`
 export default function MemoModal() {
   const { isOpen, handleCloseModal, currentModalData } = useModal();
 
+  const handleDeleteBtn = async () => {
+    if (currentModalData.memoId) await deleteMemo(currentModalData.memoId);
+    await handleCloseModal();
+  };
+
+  const handleUpdateBtn = async () => {
+    const testData = {
+      content: 'string',
+      favorite: true,
+      folderId: 3,
+    };
+    if (currentModalData.memoId) await updateMemo(currentModalData.memoId, testData);
+    await handleCloseModal();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
       <ModalOverlay />
@@ -65,10 +81,10 @@ export default function MemoModal() {
           <p>{currentModalData.memoContent}</p>
         </ModalBody>
         <ModalFooter className="footer">
-          <button onClick={handleCloseModal} className="edit-btn">
+          <button onClick={handleUpdateBtn} className="edit-btn">
             수정
           </button>
-          <button onClick={handleCloseModal} className="close-btn">
+          <button onClick={handleDeleteBtn} className="close-btn">
             삭제
           </button>
         </ModalFooter>

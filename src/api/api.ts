@@ -78,8 +78,17 @@ export const listMemo = async (data: any) => {
 };
 
 //## 메모 생성
+//TODO: data 타입 지정
 export const createMemo = async (data: any) => {
   return await apiAxios.post('/memos', data, getAccessTokenHeader());
+};
+
+export const deleteMemo = async (memoId: number) => {
+  return await apiAxios.delete(`memos/${memoId}`, getAccessTokenHeader());
+};
+
+export const updateMemo = async (memoId: number, data: any) => {
+  return await apiAxios.put(`memos/${memoId}`, data, getAccessTokenHeader());
 };
 
 //## 회원 조회

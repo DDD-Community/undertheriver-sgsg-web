@@ -16,6 +16,7 @@ function MemoList() {
           createdAt={d.createdAt}
           memoContent={d.memoContent}
           folderTitle={d.folderTitle}
+          memoId={d.memoId}
         />
       ))}
       <MemoModal />
