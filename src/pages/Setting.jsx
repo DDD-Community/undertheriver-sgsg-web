@@ -148,19 +148,19 @@ const Setting = () => {
               onChange={() => searchBarCheck(!isSearchBarCheck)}
             />
           </div>
-          <div className="list-wrapper">
-            <div>
-              <h4>새 탭에서 시작</h4>
-              <span>더 빠르게 사각사각 해볼까요?</span>
-            </div>
-            <Switch
-              id="ex-toggle"
-              size="lg"
-              colorScheme="gray"
-              isChecked={isExtensionUse}
-              onChange={() => extensionCheck(!isExtensionUse)}
-            />
-          </div>
+          {/*<div className="list-wrapper">*/}
+          {/*  <div>*/}
+          {/*    <h4>새 탭에서 시작</h4>*/}
+          {/*    <span>더 빠르게 사각사각 해볼까요?</span>*/}
+          {/*  </div>*/}
+          {/*  <Switch*/}
+          {/*    id="ex-toggle"*/}
+          {/*    size="lg"*/}
+          {/*    colorScheme="gray"*/}
+          {/*    isChecked={isExtensionUse}*/}
+          {/*    onChange={() => extensionCheck(!isExtensionUse)}*/}
+          {/*  />*/}
+          {/*</div>*/}
           <button className="logout-btn" onClick={userLogout}>
             로그아웃
           </button>

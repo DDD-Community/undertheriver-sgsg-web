@@ -9,6 +9,7 @@ import CloseBtn from '@/assets/img/closeBtn.svg';
 import penSound from '@/assets/sounds/penSound.mp3';
 import ErrorPopup from '@/components/common/ErrorPopup';
 import * as Utils from '@/lib/utils';
+import { useFolderListContext } from '@/contexts/FolderListContext';
 
 const textareaWrapper = css`
   padding: 3rem 1rem 0 1rem;
@@ -68,6 +69,7 @@ const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주
 const es: any = Utils.effectSound(penSound, 1);
 
 const Popup = (props: any) => {
+  const { folderList } = useFolderListContext();
   const [loading, setLoading] = useState(false);
   const [memo, setMemo] = useState({
     value: '',
@@ -144,10 +146,10 @@ const Popup = (props: any) => {
 
   const checkOverlapId = () => {
     let folderId: any = null;
-    if (props.folderList) {
-      for (let i = 0; i < props.folderList.length; i++) {
-        if (props.folderList[i].title === selectKeyword[0]) {
-          folderId = props.folderList[i].id;
+    if (folderList) {
+      for (let i = 0; i < folderList.length; i++) {
+        if (folderList[i].title === selectKeyword[0]) {
+          folderId = folderList[i].id;
         }
       }
     }
@@ -271,7 +273,6 @@ const Popup = (props: any) => {
               color={memo.nextColor}
               selectKeyword={selectKeyword}
               setSelectKeyword={setSelectKeyword}
-              folderList={props.folderList}
             />
             <Button css={saveButton} onClick={() => writePopupResult('submit')}>
               저장
