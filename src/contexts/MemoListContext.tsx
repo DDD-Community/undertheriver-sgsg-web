@@ -2,6 +2,7 @@ import { createContext, ReactNode, FunctionComponent, useEffect, useContext } fr
 import useSWR from 'swr';
 import { MemoModel } from '@/types';
 import fetcher from '@/lib/fetcher';
+import { useFolderListContext } from '@/contexts/FolderListContext';
 
 export interface MemoListContextState {
   memoList: MemoModel[] | undefined;
@@ -11,25 +12,21 @@ export const MemoListContext = createContext<MemoListContextState>({} as MemoLis
 
 interface MemoListProviderProps {
   children: ReactNode;
-  folderId?: number | undefined;
 }
 
 const baseURL = process.env.REACT_APP_API_URL;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-export const MemoListProvider: FunctionComponent<MemoListProviderProps> = ({
-  children,
-  folderId,
-}) => {
+export const MemoListProvider: FunctionComponent<MemoListProviderProps> = ({ children }) => {
+  const { selectedFolder } = useFolderListContext();
   const { data: memoList, error } = useSWR(
-    `${baseURL}/memos${folderId ? '?folderId=' + folderId : ''}`,
+    `${baseURL}/memos${selectedFolder.id ? '?folderId=' + selectedFolder.id : ''}`,
     fetcher,
   );
   if (error) return console.error(error);
   useEffect(() => {
     if (!memoList) return;
   }, [memoList]);
-  // console.log(memoList);
 
   return (
     <>

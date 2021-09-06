@@ -4,6 +4,7 @@ import { Input, Badge } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import CloseTag from '@/assets/img/closeTag.svg';
+import { useFolderListContext } from '@/contexts/FolderListContext';
 
 const inputBox = css`
   width: 16.875rem;
@@ -101,6 +102,7 @@ const closeTagBtn = css`
 `;
 
 function TagInput(props: any) {
+  const { folderList } = useFolderListContext();
   const [keyword, setKeyword] = useState('');
   const [folderListArr, setFolderListArr] = useState<any>([]);
   const [findFlag, setFindFlag] = useState(false);
@@ -109,11 +111,13 @@ function TagInput(props: any) {
 
   useEffect(() => {
     const tempArr: any = [];
-    props.folderList.map((item: any) => {
-      tempArr.push(item.title);
-    });
+    if (folderList) {
+      folderList.map((item: any) => {
+        tempArr.push(item.title);
+      });
+    }
     setFolderListArr(tempArr);
-  }, [props.folderList]);
+  }, [folderList]);
 
   useEffect(() => {
     if (keyword !== '') {

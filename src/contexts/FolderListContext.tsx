@@ -1,10 +1,22 @@
-import { createContext, ReactNode, FunctionComponent, useEffect, useContext } from 'react';
+import {
+  createContext,
+  ReactNode,
+  FunctionComponent,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import useSWR from 'swr';
 import { FolderModel } from '@/types';
 import fetcher from '@/lib/fetcher';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
 
 export interface FolderListContextState {
   folderList: FolderModel[] | undefined;
+  selectedFolder: any | null;
+  changeFolderId: (folderId: number, folderTitle: string, count: number) => void;
 }
 
 export const FolderListContext = createContext<FolderListContextState>(
@@ -23,17 +35,38 @@ export const FolderListProvider: FunctionComponent<FolderListContextProps> = ({
   children,
   orderBy,
 }) => {
+  const [selectedFolder, setSelectedFolder] = useState({
+    id: null,
+    title: '전체',
+    count: 0,
+  });
   const { data: folderList, error } = useSWR(`${baseURL}/folders?orderBy=${orderBy}`, fetcher);
   if (error) return console.error(error);
   useEffect(() => {
     if (!folderList) return;
   }, [folderList]);
 
+  useEffect(() => {
+    //TODO 쿼리스트링 처리 확인
+    const location = history.location;
+    console.log(location);
+  }, [selectedFolder]);
+
+  const changeFolderId = (folderId: any, folderTitle: string, count: number) => {
+    setSelectedFolder({
+      id: folderId,
+      title: folderTitle,
+      count: folderId ? count : 0, //## TODO 전체 폴더 길이
+    });
+  };
+
   return (
     <>
       <FolderListContext.Provider
         value={{
           folderList,
+          selectedFolder,
+          changeFolderId,
         }}
       >
         {children}

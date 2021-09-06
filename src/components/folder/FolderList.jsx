@@ -112,12 +112,11 @@ const folderListWrapper = css`
 `;
 
 function FolderList(props) {
-  const { folderList } = useFolderListContext();
+  const { folderList, selectedFolder, changeFolderId } = useFolderListContext();
   const tempSortType = localStorage.getItem('sort_type');
   let tempSortLabel =
     tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
   const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
-  // const [folderList, setFolderList] = useState([]);
   const [orderType, setOrderType] = useState({
     flag: false,
     type: 'ASC',
@@ -147,27 +146,20 @@ function FolderList(props) {
   }, [sortLabel]);
 
   useEffect(() => {
-    if (props.folderList) {
-      // setFolderList(props.folderList);
-    }
-  }, [props.folderList]);
-
-  useEffect(() => {
     if (orderType.flag) {
-      let tempList = folderList.reverse();
-      // setFolderList(tempList);
+      folderList.reverse();
     }
     setOrderType({ ...orderType, flag: false });
   }, [orderType.flag]);
 
-  const onClickFolder = (title, id = null, length) => {
+  const onClickFolder = (title, id = null, count) => {
     // TODO 쿼리스트링 처리 수정 사항
     history.push({
       pathname: '/',
-      search: `?folderId=${id}`,
+      search: id ? `?folderId=${id}` : '',
     });
 
-    props.setSelectedFolder({ title: title, id: id, length: length });
+    changeFolderId(id, title, count);
   };
 
   const renderFolderList = () => {
@@ -180,7 +172,7 @@ function FolderList(props) {
       html.push(
         <li
           key={Math.random()}
-          className={'folder-list' + (props.selectedFolder.title === '전체' ? ' current' : '')}
+          className={'folder-list' + (selectedFolder.id === null ? ' current' : '')}
           onClick={() => onClickFolder('전체', null, props.allMemoLength)}
         >
           <div className="folder-item">
@@ -194,13 +186,13 @@ function FolderList(props) {
         html.push(
           <li
             key={d.id}
-            className={'folder-list' + (props.selectedFolder.id === d.id ? ' current' : '')}
+            className={'folder-list' + (selectedFolder.id === d.id ? ' current' : '')}
             onClick={() => onClickFolder(d.title, d.id, d.memoCount)}
           >
             <div className="folder-item">
               <Folder color={d.color} /> <span className="label">{d.title}</span>
             </div>
-            {props.selectedFolder.id === d.id ? (
+            {selectedFolder.id === d.id ? (
               <img className="lock-btn" src={LockIcon} />
             ) : (
               <div className="count">{d.memoCount}</div>
