@@ -112,8 +112,8 @@ const Setting = () => {
 
   const userLogout = () => {
     localStorage.clear();
-    if (process.env.NODE_ENV === 'production') window.location.href = `https://sgsg.name/login`;
-    else window.location.href = `http://localhost:3000/login`;
+    if (process.env.NODE_ENV === 'production') window.location.href = 'https://sgsg.space/login';
+    else window.location.href = 'http://localhost:3000/login';
   };
 
   return (

@@ -15,8 +15,8 @@ const AfterLogin = () => {
         }
         localStorage.setItem('access_token', token);
         history.push({ pathname: '/' });
-        if (process.env.NODE_ENV === 'production') window.location.href = `https://sgsg.name`;
-        else window.location.href = `http://localhost:3000/`;
+        if (process.env.NODE_ENV === 'production') window.location.href = 'https://sgsg.space';
+        else window.location.href = 'http://localhost:3000/';
       }
     } catch (e) {
       history.push('/login');
