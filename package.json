@@ -2,7 +2,7 @@
   "name": "ce-test",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://api.sgsg.space/v1",
+  "proxy": "https://api.sgsg.name/v1",
   "dependencies": {
     "@chakra-ui/react": "^1.3.4",
     "@craco/craco": "^6.2.0",
