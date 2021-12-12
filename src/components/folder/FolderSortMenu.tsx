@@ -6,7 +6,7 @@ import { css, jsx } from '@emotion/react';
 
 const menuListItem = css`
   font-size: 1rem;
-  font-width: 400;
+  //font-width: 400;
   line-height: 22px;
   color: #3c3a37;
   padding: 0.75rem 1.5rem;
@@ -24,8 +24,8 @@ const menuListItem = css`
   }
 `;
 
-const FolderSortMenu = ({ menu, sortLabel, setSortLabel, leftPosition }) => {
-  const menuList = menu.map((d) => (
+const FolderSortMenu = ({ menu, sortLabel, setSortLabel, leftPosition }: any) => {
+  const menuList = menu.map((d: any) => (
     <p
       key={d.label}
       css={menuListItem}
@@ -45,9 +45,9 @@ const FolderSortMenu = ({ menu, sortLabel, setSortLabel, leftPosition }) => {
         boxShadow: '0px 10px 16px rgba(211, 207, 197, 0.7)',
         borderRadius: '4px',
         top: localStorage.getItem('search_bar') === 'true' ? '374px' : '270px',
-        left: `${leftPosition - 130}px`,
+        left: `${leftPosition ? leftPosition - 130 : 0}px`,
         marginRight: '20px',
-        zIndex: '18',
+        zIndex: 18,
       }}
     >
       {menuList}

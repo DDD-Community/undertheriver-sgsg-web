@@ -17,7 +17,7 @@ import { useModal } from '@/hooks/UseModal';
 import Modal from '@/components/common/Modal';
 import MemoList from '@/components/memo/MemoList';
 import { MemoListProvider } from '@/contexts/MemoListContext';
-import { useFolderListContext } from '@/contexts/FolderListContext';
+import { FolderListProvider, useFolderListContext } from '@/contexts/FolderListContext';
 import { SWRConfig } from 'swr';
 
 const pageWrapper = css`
@@ -82,7 +82,7 @@ const cardListWrapper = css`
 const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주세요.';
 
 const Main = () => {
-  const { selectedFolder } = useFolderListContext();
+  const { selectedFolder, allMemoLength } = useFolderListContext();
 
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
@@ -100,7 +100,6 @@ const Main = () => {
     active: '',
     content: '',
   });
-  const [allMemoLength, setAllMemoLength] = useState(0);
   const [sortType, setSortType] = useState(
     localStorage.getItem('sort_type') ? localStorage.getItem('sort_type') : 'CREATED_AT',
   );
@@ -123,7 +122,9 @@ const Main = () => {
   const buttonRef = useRef();
 
   useEffect(() => {
-    userInfoApi();
+    if (localStorage.getItem('access_token')) {
+      userInfoApi();
+    }
   }, []);
 
   useEffect(() => {
@@ -131,19 +132,17 @@ const Main = () => {
   }, [selectedFolder]);
 
   const memoWrite = () => {
-    if (buttonRef.current !== null) {
-      setWritePopup({
-        flag: true,
-        left: buttonRef.current.offsetLeft - 344,
-        top: buttonRef.current.offsetTop + 72,
-      });
-    }
+    setWritePopup({
+      flag: true,
+      left: buttonRef.current?.offsetLeft - 344,
+      top: buttonRef.current?.offsetTop + 72,
+    });
   };
 
   const userInfoApi = () => {
     try {
       setLoading(true);
-      Api.userInfo()
+      Api.getUserInfo()
         .then((response) => {
           setLoading(false);
           if (response.status === 200) {
@@ -176,8 +175,7 @@ const Main = () => {
   };
 
   return (
-    <>
-      {/*<FolderListProvider orderBy={'MEMO'}>*/}
+    <FolderListProvider orderBy={sortType}>
       <MemoListProvider>
         <GNB />
         <main css={pageWrapper}>
@@ -194,7 +192,9 @@ const Main = () => {
                 <h2 className="folder-name">
                   {selectedFolder && selectedFolder.title ? selectedFolder.title : ''}
                   <span className="folder-count">
-                    {selectedFolder && selectedFolder.count !== 0 ? selectedFolder.count : 0}
+                    {selectedFolder && selectedFolder.count !== 0
+                      ? selectedFolder.count
+                      : allMemoLength}
                   </span>
                 </h2>
                 <button onClick={() => memoWrite()} ref={buttonRef}>
@@ -224,8 +224,7 @@ const Main = () => {
           setErrorPopup={setErrorPopup}
         />
       </MemoListProvider>
-      {/*</FolderListProvider>*/}
-    </>
+    </FolderListProvider>
   );
 };
 export default Main;

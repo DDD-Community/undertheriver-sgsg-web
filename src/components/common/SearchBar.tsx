@@ -35,13 +35,13 @@ const SearchBarField = css`
 
 const SearchBar = () => {
   const [searchInput, setSearchInput] = useState('');
-  const searchInputRef = useRef(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    searchInputRef?.current.focus();
+    searchInputRef.current?.focus();
   }, []);
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = (event: any) => {
     if (event.key === 'Enter' && searchInput !== '') {
       searchGoogle();
     }

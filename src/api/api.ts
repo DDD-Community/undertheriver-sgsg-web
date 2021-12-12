@@ -1,8 +1,6 @@
-import axios from 'axios';
-import { createBrowserHistory } from 'history';
 import apiAxios from 'axios';
+import { createBrowserHistory } from 'history';
 
-//TODO: 임시 추가
 apiAxios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const history = createBrowserHistory();
@@ -10,24 +8,6 @@ const history = createBrowserHistory();
 function getAccessTokenHeader() {
   const auth = 'Bearer' + ` ` + localStorage.getItem('access_token');
   return { headers: { Authorization: auth } };
-}
-
-function successStatusCheck(response: any, resolve: any) {
-  if (response.status === 200) {
-    resolve(response);
-  } else if (response.status === 401) {
-    moveLogin();
-  } else {
-    resolve('error');
-  }
-}
-
-function failStatusCheck(err: any, reject: any) {
-  if (err.response && err.response.status === 401) {
-    moveLogin();
-  } else {
-    reject(err);
-  }
 }
 
 function moveLogin() {
@@ -92,8 +72,7 @@ export const updateMemo = async (memoId: number, data: any) => {
 };
 
 //## 회원 조회
-//TODO: 함수 작성할 때, 동사를 먼저 쓰기! getUserInfo 이런 식으로.
-export const userInfo = async () => {
+export const getUserInfo = async () => {
   try {
     return await apiAxios.get('/users/me', getAccessTokenHeader());
   } catch (e) {
@@ -110,5 +89,5 @@ export default {
   checkFolderColor,
   listMemo,
   createMemo,
-  userInfo,
+  getUserInfo,
 };

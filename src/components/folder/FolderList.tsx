@@ -111,10 +111,10 @@ const folderListWrapper = css`
   }
 `;
 
-function FolderList(props) {
+function FolderList(props: any) {
   const { folderList, selectedFolder, changeFolderId } = useFolderListContext();
   const tempSortType = localStorage.getItem('sort_type');
-  let tempSortLabel =
+  const tempSortLabel =
     tempSortType === 'NAME' ? '이름순' : tempSortType === 'CREATED_AT' ? '생성순' : '메모 개수순';
   const menu = [{ label: '이름순' }, { label: '생성순' }, { label: '메모 개수순' }];
   const [orderType, setOrderType] = useState({
@@ -123,7 +123,7 @@ function FolderList(props) {
   });
   const [sortLabel, setSortLabel] = useState(tempSortLabel ? tempSortLabel : '생성순');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const sortMenuRef = useRef(null);
+  const sortMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let sortType = '';
@@ -146,13 +146,16 @@ function FolderList(props) {
   }, [sortLabel]);
 
   useEffect(() => {
-    if (orderType.flag) {
+    if (orderType.flag && folderList) {
       folderList.reverse();
     }
     setOrderType({ ...orderType, flag: false });
   }, [orderType.flag]);
 
-  const onClickFolder = (title, id = null, count) => {
+  const onClickFolder = (title: string, id: any, count: number) => {
+    if (selectedFolder.id === id) {
+      return;
+    }
     // TODO 쿼리스트링 처리 수정 사항
     history.push({
       pathname: '/',
@@ -163,43 +166,42 @@ function FolderList(props) {
   };
 
   const renderFolderList = () => {
-    let html = [];
+    const html: any = [];
 
     try {
-      if (folderList.length === 0) {
-        return html;
-      }
-      html.push(
-        <li
-          key={Math.random()}
-          className={'folder-list' + (selectedFolder.id === null ? ' current' : '')}
-          onClick={() => onClickFolder('전체', null, props.allMemoLength)}
-        >
-          <div className="folder-item">
-            <Folder color="black" /> <span className="label">전체</span>
-          </div>
-          <div className="count">{props.allMemoLength}</div>
-        </li>,
-      );
-
-      folderList.map((d) => {
+      if (folderList && folderList.length > 0) {
         html.push(
           <li
-            key={d.id}
-            className={'folder-list' + (selectedFolder.id === d.id ? ' current' : '')}
-            onClick={() => onClickFolder(d.title, d.id, d.memoCount)}
+            key={Math.random()}
+            className={'folder-list' + (selectedFolder.id === null ? ' current' : '')}
+            onClick={() => onClickFolder('전체', null, props.allMemoLength)}
           >
             <div className="folder-item">
-              <Folder color={d.color} /> <span className="label">{d.title}</span>
+              <Folder color="black" /> <span className="label">전체</span>
             </div>
-            {selectedFolder.id === d.id ? (
-              <img className="lock-btn" src={LockIcon} />
-            ) : (
-              <div className="count">{d.memoCount}</div>
-            )}
+            <div className="count">{props.allMemoLength}</div>
           </li>,
         );
-      });
+
+        folderList.map((d) => {
+          html.push(
+            <li
+              key={d.id}
+              className={'folder-list' + (selectedFolder.id === d.id ? ' current' : '')}
+              onClick={() => onClickFolder(d.title, d.id, d.memoCount)}
+            >
+              <div className="folder-item">
+                <Folder color={d.color} /> <span className="label">{d.title}</span>
+              </div>
+              {selectedFolder.id === d.id ? (
+                <img className="lock-btn" src={LockIcon} />
+              ) : (
+                <div className="count">{d.memoCount}</div>
+              )}
+            </li>,
+          );
+        });
+      }
       return html;
     } catch (e) {
       return html;
@@ -234,7 +236,7 @@ function FolderList(props) {
               menu={menu}
               sortLabel={sortLabel}
               setSortLabel={setSortLabel}
-              leftPosition={sortMenuRef.current.offsetLeft}
+              leftPosition={sortMenuRef.current?.offsetLeft}
             />
           )}
         </div>

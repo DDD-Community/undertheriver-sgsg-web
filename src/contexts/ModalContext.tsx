@@ -6,7 +6,7 @@ export const ModalContext = createContext({} as ModalContextProps);
 
 interface ModalContextProps {
   isOpen: boolean;
-  handleOpenModal: (args: Partial<MemoModel>) => void;
+  handleOpenModal: (args?: Partial<MemoModel>) => void;
   handleCloseModal: () => void;
   currentModalData: Partial<MemoModel>;
 }
@@ -17,7 +17,7 @@ interface ModalProviderProps {
 
 export function ModalProvider({ children }: ModalProviderProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const [currentModalData, setCurrentModalData] = useState({});
+  const [currentModalData, setCurrentModalData] = useState<any>({});
 
   function handleCloseModal() {
     onClose();
