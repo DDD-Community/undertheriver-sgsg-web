@@ -91,7 +91,8 @@ const pageWrapper = css`
 `;
 const Setting = () => {
   const { handleOpenModal } = useModal();
-  const [email] = useState(JSON.parse(localStorage.getItem('user')).email);
+  const tempEmail: any = localStorage.getItem('user');
+  const [email] = useState<string>(tempEmail ? JSON.parse(tempEmail).email : '');
   const [isSearchBarCheck, setIsSearchBarCheck] = useState(false);
   const [isExtensionUse, setIsExtensionUse] = useState(false);
 
@@ -100,13 +101,13 @@ const Setting = () => {
     setIsExtensionUse(localStorage.getItem('use_extension') === 'true');
   }, []);
 
-  const searchBarCheck = (flag) => {
-    localStorage.setItem('search_bar', flag);
+  const searchBarCheck = (flag: boolean) => {
+    localStorage.setItem('search_bar', String(flag));
     setIsSearchBarCheck(flag);
   };
 
-  const extensionCheck = (flag) => {
-    localStorage.setItem('use_extension', flag);
+  const extensionCheck = (flag: boolean) => {
+    localStorage.setItem('use_extension', String(flag));
     setIsExtensionUse(flag);
   };
 
@@ -131,7 +132,7 @@ const Setting = () => {
               <h4>메모 비밀번호 설정</h4>
               <span>현재 비밀번호가 설정되어있어요.</span>
             </div>
-            <button className="setting-btn" onClick={handleOpenModal}>
+            <button className="setting-btn" onClick={() => handleOpenModal()}>
               비밀번호 변경
             </button>
             <PasswordInputModal />

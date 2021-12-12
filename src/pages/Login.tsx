@@ -93,7 +93,12 @@ const Login = () => {
               </button>
             </div>
             <div css={subTextWrapper}>
-              <a href="">개인 정보 이용 약관 바로가기</a>
+              <a
+                href="https://reliable-coriander-ef4.notion.site/2021-07-11-616ea9803fa34fe5a941330fabaf06e6"
+                target="_blank"
+              >
+                개인 정보 이용 약관 바로가기
+              </a>
             </div>
           </div>
         </section>

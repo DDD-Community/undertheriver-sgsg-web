@@ -21,8 +21,10 @@ const ModalWrapper = css`
   width: 45rem;
   height: 36.25rem;
   padding: 2rem;
+
   .header {
     display: inline-flex;
+
     .title {
       margin-left: 1rem;
       line-height: 36px;
@@ -30,6 +32,7 @@ const ModalWrapper = css`
       font-size: 1.5rem;
     }
   }
+
   .body {
     .divider {
       width: 100%;
@@ -38,10 +41,12 @@ const ModalWrapper = css`
       margin-bottom: 1.5rem;
     }
   }
+
   .footer {
     color: #858585;
     font-size: 1rem;
     line-height: 22px;
+
     .edit-btn {
       margin-right: 2.5rem;
     }
@@ -67,28 +72,32 @@ export default function MemoModal() {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
-      <ModalOverlay />
-      <ModalContent css={ModalWrapper}>
-        <ModalHeader className="header">
-          <Folder color={currentModalData.folderColor ? currentModalData.folderColor : 'red'} />
-          <span className="title">{currentModalData.folderTitle}</span>
-        </ModalHeader>
-        <ModalCloseButton mt={6} mr={6} />
-        <ModalBody className="body">
-          <p>{currentModalData.createdAt}</p>
-          <hr className="divider" />
-          <p>{currentModalData.memoContent}</p>
-        </ModalBody>
-        <ModalFooter className="footer">
-          <button onClick={handleUpdateBtn} className="edit-btn">
-            수정
-          </button>
-          <button onClick={handleDeleteBtn} className="close-btn">
-            삭제
-          </button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <>
+      {currentModalData && (
+        <Modal css={{ overflowX: 'scroll' }} isOpen={isOpen} onClose={handleCloseModal} isCentered>
+          <ModalOverlay />
+          <ModalContent css={ModalWrapper}>
+            <ModalHeader className="header">
+              <Folder color={currentModalData.folderColor ? currentModalData.folderColor : 'red'} />
+              <span className="title">{currentModalData.folderTitle}</span>
+            </ModalHeader>
+            <ModalCloseButton mt={6} mr={6} />
+            <ModalBody className="body">
+              <p>{currentModalData.createdAt}</p>
+              <hr className="divider" />
+              <p>{currentModalData.memoContent}</p>
+            </ModalBody>
+            <ModalFooter className="footer">
+              <button onClick={handleUpdateBtn} className="edit-btn">
+                수정
+              </button>
+              <button onClick={handleDeleteBtn} className="close-btn">
+                삭제
+              </button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
+    </>
   );
 }
