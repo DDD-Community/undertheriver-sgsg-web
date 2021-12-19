@@ -57,6 +57,7 @@ const pageWrapper = css`
         font-size: 2.5rem;
         line-height: 3.625rem;
         font-weight: bold;
+        user-select: none;
       }
 
       .folder-count {
@@ -126,10 +127,6 @@ const Main = () => {
       userInfoApi();
     }
   }, []);
-
-  useEffect(() => {
-    console.log(selectedFolder);
-  }, [selectedFolder]);
 
   const memoWrite = () => {
     setWritePopup({
@@ -205,7 +202,7 @@ const Main = () => {
               </div>
               <article css={cardListWrapper}>
                 <ul className="card-list">
-                  <MemoList />
+                  <MemoList setErrorPopup={setErrorPopup} />
                 </ul>
               </article>
             </div>
