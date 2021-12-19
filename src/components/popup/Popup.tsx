@@ -221,6 +221,9 @@ const Popup = (props: any) => {
               es.play();
               props.setUpdateFlag(true);
               setSelectKeyword([]);
+              setTimeout(() => {
+                location.replace('');
+              }, 2000);
             } else {
               setErrorPopup({ active: 'active', content: defaultMsg });
             }

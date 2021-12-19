@@ -42,7 +42,10 @@ export const FolderListProvider: FunctionComponent<FolderListContextProps> = ({
     count: 0,
   });
   const [allMemoLength, setAllMemoLength] = useState(0);
-  const { data: folderList, error } = useSWR(`${baseURL}/folders?orderBy=${orderBy}`, fetcher);
+  const { data: folderList, error, mutate } = useSWR(
+    `${baseURL}/folders?orderBy=${orderBy}`,
+    fetcher,
+  );
   if (error) return console.error(error);
   useEffect(() => {
     if (!folderList) return;

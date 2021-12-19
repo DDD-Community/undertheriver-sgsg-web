@@ -71,6 +71,14 @@ export const updateMemo = async (memoId: number, data: any) => {
   return await apiAxios.put(`memos/${memoId}`, data, getAccessTokenHeader());
 };
 
+export const favoriteMemo = async (memoId: number) => {
+  return await apiAxios.post(`memos/${memoId}/favorite`, {}, getAccessTokenHeader());
+};
+
+export const unFavoriteMemo = async (memoId: number) => {
+  return await apiAxios.post(`memos/${memoId}/unfavorite`, {}, getAccessTokenHeader());
+};
+
 //## 회원 조회
 export const getUserInfo = async () => {
   try {
@@ -86,8 +94,12 @@ export default {
   createFolder,
   deleteFolder,
   updateFolder,
+  favoriteMemo,
+  unFavoriteMemo,
   checkFolderColor,
   listMemo,
   createMemo,
+  deleteMemo,
+  updateMemo,
   getUserInfo,
 };

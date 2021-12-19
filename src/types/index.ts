@@ -14,6 +14,7 @@ export interface MemoModel {
   thumbnailFaviconUrl?: string;
   thumbnailTitle?: string;
   thumbnailUrl?: string;
+  setErrorPopup?: () => void;
 }
 
 export interface FolderModel {

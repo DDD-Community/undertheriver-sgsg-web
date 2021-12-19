@@ -81,6 +81,7 @@ const folderListWrapper = css`
     font-weight: bold;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
+    user-select: none;
 
     .folder-item {
       display: inherit;

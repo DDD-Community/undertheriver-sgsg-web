@@ -8,7 +8,7 @@ import ProfilePhoto from '@/assets/img/profilePhoto.png';
 
 const gnbWrapper = css`
   height: 80px;
-  width: 100%;
+  width: 100vw;
   background: #f9f7f2;
   position: fixed;
   z-index: 19;
