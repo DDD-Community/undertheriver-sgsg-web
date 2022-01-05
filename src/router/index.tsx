@@ -6,7 +6,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Login from '@/pages/Login';
 import AfterLogin from '@/pages/AfterLogin';
 import PrivateRoute from '@/router/PrivateRoute';
-import Main from '@/pages/main';
+import Main from '@/pages/Main';
 import Setting from '@/pages/Setting';
 import NotFound from '@/pages/NotFound';
 

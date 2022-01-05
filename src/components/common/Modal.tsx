@@ -14,7 +14,7 @@ import {
 import { css, jsx } from '@emotion/react';
 import LinkIcon from '@/assets/img/icon-link.svg';
 import Folder from '@/components/folder/Folder';
-import { useModal } from '@/hooks/UseModal';
+import { useModal } from '@/hooks/useModal';
 import Api from '@/api/api';
 
 const ModalWrapper = css`

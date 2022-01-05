@@ -4,7 +4,7 @@ import { Box } from '@chakra-ui/react';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import { MemoModel } from '@/types';
-import { useModal } from '@/hooks/UseModal';
+import { useModal } from '@/hooks/useModal';
 import Api from '@/api/api';
 
 const menuWrapper = css`

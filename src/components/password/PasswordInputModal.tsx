@@ -12,7 +12,7 @@ import {
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import PasswordInput from '@/components/password/PasswordInput';
-import { useModal } from '@/hooks/UseModal';
+import { useModal } from '@/hooks/useModal';
 
 const ModalWrapper = css`
   max-width: 37.5rem;

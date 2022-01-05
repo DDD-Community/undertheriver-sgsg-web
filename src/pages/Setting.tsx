@@ -6,7 +6,7 @@ import { Switch } from '@chakra-ui/react';
 import GNB from '@/components/common/GNB';
 import GoogleIcon from '@/assets/img/icon-google.svg';
 import PasswordInputModal from '@/components/password/PasswordInputModal';
-import { useModal } from '@/hooks/UseModal';
+import { useModal } from '@/hooks/useModal';
 
 const pageWrapper = css`
   background: #f9f7f2;

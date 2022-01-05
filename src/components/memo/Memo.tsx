@@ -7,8 +7,8 @@ import Tag from '@/components/memo/Tag';
 import MemoMenu from '@/components/memo/MemoMenu';
 import Badge from '@/components/memo/Badge';
 import MoreBtn from '@/assets/img/more.svg';
-import { useModal } from '@/hooks/UseModal';
-import useMenu from '@/hooks/UseMenu';
+import { useModal } from '@/hooks/useModal';
+import useMenu from '@/hooks/useMenu';
 import { MemoModel } from '@/types';
 
 const memoWrapper = css`
