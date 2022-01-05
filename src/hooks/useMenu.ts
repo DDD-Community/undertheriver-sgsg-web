@@ -9,21 +9,21 @@ const useMenu = () => {
 
   function onCloseMenu(ref: React.RefObject<HTMLDivElement>) {
     useEffect(() => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
+      function handleClickOutside(event: CustomEvent) {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
           setIsMenuOpen(false);
         }
       }
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', ((event: CustomEvent) => {
+        handleClickOutside(event);
+      }) as EventListener);
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', ((event: CustomEvent) => {
+          handleClickOutside(event);
+        }) as EventListener);
       };
     }, [ref]);
   }
-
-  // const wrapperRef = useRef<HTMLDivElement>(null);
 
   return {
     isMenuOpen,
