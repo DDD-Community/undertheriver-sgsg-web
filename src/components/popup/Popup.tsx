@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Textarea, Button } from '@chakra-ui/react';
 import TagInput from '@/components/memo/TagInput';
-import Api from '@/api/api';
+import Api, { listMemo } from '@/api/api';
+
+const baseURL = process.env.REACT_APP_API_URL;
 
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
@@ -10,6 +12,7 @@ import penSound from '@/assets/sounds/penSound.mp3';
 import ErrorPopup from '@/components/common/ErrorPopup';
 import * as Utils from '@/lib/utils';
 import { useFolderListContext } from '@/contexts/FolderListContext';
+import { mutate } from 'swr';
 
 const textareaWrapper = css`
   padding: 3rem 1rem 0 1rem;
@@ -69,7 +72,7 @@ const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주
 const es: any = Utils.effectSound(penSound, 1);
 
 const Popup = (props: any) => {
-  const { folderList } = useFolderListContext();
+  const { folderList, selectedFolder } = useFolderListContext();
   const [loading, setLoading] = useState(false);
   const [memo, setMemo] = useState({
     value: '',
@@ -156,7 +159,7 @@ const Popup = (props: any) => {
     writeMemoApi(folderId);
   };
 
-  const checkfolderColor = () => {
+  const checkFolderColor = () => {
     const nextColor = localStorage.getItem('next_color');
     const tempColorArr = ['BLUE', 'GREEN', 'RED', 'ORANGE', 'PURPLE'];
 
@@ -202,7 +205,7 @@ const Popup = (props: any) => {
     }
   };
 
-  const writeMemoApi = (folderId?: any) => {
+  const writeMemoApi = async (folderId?: any) => {
     try {
       const obj = {
         memoContent: memo.value,
@@ -211,32 +214,13 @@ const Popup = (props: any) => {
         folderId: folderId ? folderId : null,
       };
       setLoading(true);
-      Api.createMemo(obj)
-        .then((response: any) => {
-          setLoading(false);
-          if (response.status === 200) {
-            const data = response.data;
-            if (data.success) {
-              checkfolderColor();
-              es.play();
-              props.setUpdateFlag(true);
-              setSelectKeyword([]);
-              setTimeout(() => {
-                location.replace('');
-              }, 2000);
-            } else {
-              setErrorPopup({ active: 'active', content: defaultMsg });
-            }
-          } else {
-            setErrorPopup({ active: 'active', content: defaultMsg });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          setErrorPopup({ active: 'active', content: defaultMsg });
-        });
-    } catch (e) {
+      await Api.createMemo(obj);
+      checkFolderColor();
+      es.play();
+      props.setUpdateFlag(true);
+      setSelectKeyword([]);
+      await mutate(`${baseURL}/memos${selectedFolder.id ? '?folderId=' + selectedFolder.id : ''}`);
+    } catch (err) {
       setLoading(false);
       setErrorPopup({ active: 'active', content: defaultMsg });
     }

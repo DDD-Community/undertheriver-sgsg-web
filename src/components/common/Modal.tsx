@@ -16,6 +16,10 @@ import LinkIcon from '@/assets/img/icon-link.svg';
 import Folder from '@/components/folder/Folder';
 import { useModal } from '@/hooks/useModal';
 import Api from '@/api/api';
+import { mutate } from 'swr';
+import { useFolderListContext } from '@/contexts/FolderListContext';
+
+const baseURL = process.env.REACT_APP_API_URL;
 
 const ModalWrapper = css`
   max-width: 45rem;
@@ -211,6 +215,7 @@ export default function MemoModal() {
     currentModalData,
   } = useModal();
   const [loading, setLoading] = useState<boolean>(false);
+  const { selectedFolder } = useFolderListContext();
 
   const [content, setContent] = useState<string>('');
   const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
@@ -284,7 +289,7 @@ export default function MemoModal() {
       await Api.updateMemo(currentModalData.memoId, params)
         .then((response: any) => {
           if (response.status === 200) {
-            location.replace('');
+            mutate(`${baseURL}/memos${selectedFolder.id ? '?folderId=' + selectedFolder.id : ''}`);
           }
         })
         .catch((err) => {

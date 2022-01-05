@@ -6,6 +6,10 @@ import { css, jsx } from '@emotion/react';
 import { MemoModel } from '@/types';
 import { useModal } from '@/hooks/useModal';
 import Api from '@/api/api';
+import { useFolderListContext } from '@/contexts/FolderListContext';
+import { mutate } from 'swr';
+
+const baseURL = process.env.REACT_APP_API_URL;
 
 const menuWrapper = css`
   position: absolute;
@@ -41,6 +45,7 @@ const defaultMsg = '일시적인 오류입니다. 잠시 후 다시 시도해주
 
 const MemoMenu = ({ memo, favorite, setErrorPopup }: MemoMenuProps) => {
   const { handleOpenModal } = useModal();
+  const { selectedFolder } = useFolderListContext();
   const [menu] = useState([
     { label: '메모 잠그기', type: 'lock' },
     { label: '즐겨찾기', type: 'favorite' },
@@ -75,7 +80,9 @@ const MemoMenu = ({ memo, favorite, setErrorPopup }: MemoMenuProps) => {
           if (response.status === 200) {
             const data = response.data;
             if (data.success) {
-              location.replace('');
+              mutate(
+                `${baseURL}/memos${selectedFolder.id ? '?folderId=' + selectedFolder.id : ''}`,
+              );
             } else {
               setErrorPopup({ active: 'active', content: defaultMsg });
             }
@@ -99,7 +106,7 @@ const MemoMenu = ({ memo, favorite, setErrorPopup }: MemoMenuProps) => {
       await Api.deleteMemo(memo.memoId)
         .then((response: any) => {
           if (response.status === 200) {
-            location.replace('');
+            mutate(`${baseURL}/memos${selectedFolder.id ? '?folderId=' + selectedFolder.id : ''}`);
           }
         })
         .catch((err) => {
