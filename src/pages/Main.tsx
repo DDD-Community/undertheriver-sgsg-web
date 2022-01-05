@@ -51,7 +51,7 @@ const Main = () => {
     }
   }, []);
 
-  const memoWrite = () => {
+  const handleClickNewMemoBtn = () => {
     if (buttonRef !== undefined && buttonRef.current !== null) {
       setWritePopup({
         flag: true,
@@ -119,7 +119,7 @@ const Main = () => {
                       : allMemoLength}
                   </span>
                 </h2>
-                <button onClick={() => memoWrite()} ref={buttonRef}>
+                <button onClick={() => handleClickNewMemoBtn()} ref={buttonRef}>
                   <figure>
                     <img src={NewMemoBtn} alt="Button too add new notes" />
                   </figure>

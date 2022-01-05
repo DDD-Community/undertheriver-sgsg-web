@@ -1,5 +1,5 @@
 {
-  "name": "ce-test",
+  "name": "sgsg-web",
   "version": "0.1.0",
   "private": true,
   "proxy": "https://api.sgsg.name/v1",
