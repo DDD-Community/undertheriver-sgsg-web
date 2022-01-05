@@ -26,7 +26,7 @@ export const FolderListContext = createContext<FolderListContextState>(
 
 interface FolderListContextProps {
   children: ReactNode;
-  orderBy: string | undefined;
+  orderBy: string | null;
 }
 
 const baseURL = process.env.REACT_APP_API_URL;

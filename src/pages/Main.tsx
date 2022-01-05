@@ -43,7 +43,7 @@ const Main = () => {
   const [updateFlag, setUpdateFlag] = useState(false);
 
   const [isSearchBar] = useState(localStorage.getItem('search_bar'));
-  const buttonRef = useRef();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (localStorage.getItem('access_token')) {
@@ -52,11 +52,13 @@ const Main = () => {
   }, []);
 
   const memoWrite = () => {
-    setWritePopup({
-      flag: true,
-      left: buttonRef.current?.offsetLeft - 344,
-      top: buttonRef.current?.offsetTop + 72,
-    });
+    if (buttonRef !== undefined && buttonRef.current !== null) {
+      setWritePopup({
+        flag: true,
+        left: buttonRef?.current?.offsetLeft - 344,
+        top: buttonRef?.current?.offsetTop + 72,
+      });
+    }
   };
 
   const userInfoApi = () => {
@@ -65,7 +67,7 @@ const Main = () => {
       Api.getUserInfo()
         .then((response) => {
           setLoading(false);
-          if (response.status === 200) {
+          if (response?.status === 200) {
             const data = response.data;
             if (data.success) {
               setUser({
